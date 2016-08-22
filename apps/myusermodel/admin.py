@@ -45,14 +45,15 @@ class ProfileResource(resources.ModelResource):
 	first_name = fields.Field(attribute='first_name', column_name='Voornaam')
 	last_name = fields.Field(attribute='last_name', column_name='Naam')
 
-	#geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum', widget=widgets.DateWidget())
+	aanspreek = fields.Field(attribute='aanspreek', column_name='Aanspreektitel (Aanschrijf)')
 	geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum')
 	postcode = fields.Field(attribute='postcode', column_name='Hoofdpostnr (Aanschrijf)')
 	
+	parent_name = fields.Field(attribute='parent_name', column_name='Aanspreeknaam (Aanschrijf)')
+	parent_address = fields.Field(attribute="parent_address",column_name='Aanschrijfadres') #adres gescheiden ouder
 	parent1 = fields.Field(attribute="parent1", column_name="Vader")
 	parent2 = fields.Field(attribute="parent2", column_name="Moeder")
 	
-
 	"""
 	VOORBEELD VAN OneToOneField
 	address = OneToOneField(
@@ -99,6 +100,7 @@ class ProfileResource(resources.ModelResource):
 					instance.save()
 			except IntegrityError, e:
 				#IntegrityError: (1062, "Duplicate entry 'zzz' for key 'username'")
+				print "save instance: integrity error"
 				logger.debug(e)
 		self.after_save_instance(instance, dry_run)
 
@@ -109,45 +111,83 @@ class ProfileResource(resources.ModelResource):
 
 	def after_save_instance(self, instance, dry_run):
 		print 'after_save'
+		print instance
+		print instance.__dict__
+		gescheiden = False
+		if instance.aanspreek == "Aan":
+			gescheiden = True
+
 		user = instance
-		if not instance.parent1 == '':
-			print 'parent1'
-			try:
-				parent1_user = User(username=instance.parent1, first_name=instance.parent1)
-			except Exception, e:
-				print e
-		if not instance.parent2 == '':
-			print 'parent2'
-			try:
-				parent2_user = User(username=instance.parent2, first_name=instance.parent2)
-			except Exception, e:
-				print e
-			
 		profile = Profile(
 			user=user,
+			adres=instance.parent_address,
 			postcode=instance.postcode,
 			geboortedatum=datetime.strptime(instance.geboortedatum, "%d.%m.%Y").date(), #format str to date
 			is_leerling=True,
+			gescheiden=gescheiden,
 			)
-		if dry_run == False:
-			try:
-				#user = more.user
-				print "user save"
-				user.save() # Duplicate entry opvangen
-				profile.save() # Duplicate entry opvangen
-				
-				parent1_user.save()
-				profile_parent1 = Profile(user=parent1_user, is_ouder=True)
-				profile_parent1.save() # Duplicate opvagen
 
-				parent2_user.save()
-				profile_parent2 = Profile(user=parent2_user, is_ouder=True)
-				profile_parent2.save() # Duplicate opvagen
+		if gescheiden:
+			parent_user = User(username=instance.parent_name, first_name=instance.parent_name)
+		else:
+			if not instance.parent1 == '':
+				print 'parent1'
+				parent1_user = User(username=instance.parent1, first_name=instance.parent1)
 				
-				profile.parents.add(profile_parent1, profile_parent2)
+			if not instance.parent2 == '':
+				print 'parent2'
+				parent2_user = User(username=instance.parent2, first_name=instance.parent2)
+			
+		if dry_run == False:
+			print "SAVE"
+			
+			try:
+				with transaction.atomic():
+					user.save() # Duplicate entry opvangen of iemand met zelfde voornaam+naam?
+					profile.save() # Duplicate entry opvangen
+			except IntegrityError, e:
+				print "user komt al voor"
+				#pass
+				# wat doen? dubbele naam?
+				profile = Profile.objects.get(user__username=user.username)
 			except Exception, e:
-				print "except"
+				print "except user save"
 				print e
+				
+			if gescheiden:
+				try:
+					with transaction.atomic():
+						parent_user.save()
+						parent_profile = Profile(user=parent_user,is_ouder=True, adres=instance.parent_address)
+						parent_profile.save()
+						profile.parents.add(parent_profile)
+						
+				except IntegrityError, e:
+					print "user komt al voor"
+					#pass
+					parent_profile = Profile.objects.get(user__username=parent_user)
+					profile.parents.add(parent_profile)
+					# wat doen? dubbele naam?
+				except Exception, e:
+					raise e
+
+				
+
+			else:
+				try:
+					with transaction.atomic():
+						parent1_user.save()
+						profile_parent1 = Profile(user=parent1_user, is_ouder=True, adres=instance.parent_address)
+						profile_parent1.save() # Duplicate opvagen
+
+						parent2_user.save()
+						profile_parent2 = Profile(user=parent2_user, is_ouder=True, adres=instance.parent_address)
+						profile_parent2.save() # Duplicate opvagen
+						
+						profile.parents.add(profile_parent1, profile_parent2)
+				except Exception, e:
+					print "except"
+					print e
 		
 
 

@@ -26,6 +26,7 @@ class Profile(models.Model):
 	is_leerkracht = models.BooleanField(default=False)
 	is_medewerker = models.BooleanField(default=False)
 	parents = models.ManyToManyField("self", blank=True)
+	gescheiden = models.BooleanField(default=False)
 	
 	def __str__(self):
 		try:
