@@ -1,25 +1,92 @@
 {% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
 <html>
   <head>
     <title>SCHOOLAPP STEINERSCHOOL</title>
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Cuprum' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static "css/steinerschool.css" %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap-overrides.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
     
-   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body>
-    <div id="content" class="container"> 
-      <div class="row">
-        {% block content %}{% endblock %}
+    <header class="container masthead" role="banner">
+    <div class='fixed sitetitle'>
+      <?php bloginfo( 'name' ); ?>
+    </div>
+    <div id="bigheaderimage" class="hidden-xs hidden-sm">
+      <a class="nohover" href="./"><img src="{% static "img/header1.jpg" %}" alt="header image" border="0" /></a>
+    </div>
+  </header>
+  <div id="wrap" class='container'>
+  <nav class="navbar navbar-static-top" id="nav" role="navigation">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+    <div class="container collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul id="menu-header-menu" class="menu">
+        <li class="menu-item"><a href="/klas">KLASSEN</a></li>
+        <li class="menu-item"><a href="/klas">BESTUUR</a></li>
+        <li class="menu-item"><a href="/klas">WERKGROEPEN</a></li>
+        <li class="menu-item"><a href="/klas">INFORMATIE</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="content" class="container"> 
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar" id="subnav">
+          {% block sidebar-menu %}{% endblock %}
+          <li>Sidemenu</li>
+        </ul>
+      </div>
+      <div class="col-sm-9 col-md-10 main">
+        <div id="primary" class="content-area">
+          <div id="content" class="site-content" role="main">
+            {% block content %}{% endblock %}
+          </div><!-- #content -->
+        </div><!-- #primary -->   
+      </div>
+    </div> <!-- .row -->
+  </div><!-- #content -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        FOOTERMENU
       </div>
     </div>
-    <script src="{% static "js/steinerschool.js" %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js">
     
+    <div class="footerend">
+      <br />
+      Iets niet juist op deze pagina? 
+      <a href="#" style="cursor:hand;font-size: 8pt;text-align: center;" >Laat het ons weten!</a><br />
+      Vrije Rudolf Steinerschool Gent - Kasteellaan 54 - 9000 Gent - 09/235.28.00 - 
+      <a style="font-size: 8pt;text-align: center;" href="mailto:info@steinerschoolgent.be?subject=Informatie over de school via www.steinerschoolgent.be">info@steinerschoolgent.be</a>
+       - <a style="font-size: 8pt;text-align: center;" href="http://feeds.feedburner.com/VrijeRudolfSteinerschoolGent">RSS</a>
+    </div>
+  
+  </div>
+</footer>
+</div> <!-- wrap -->
+
+
+  <script src="{% static "js/steinerschool.js" %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js">
+  
   </body>
 </html>
