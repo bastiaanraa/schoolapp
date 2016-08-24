@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 
-
+AUTH_USER_MODEL = 'profile.Profile'
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'import_export',
 
-    'apps.myusermodel',
+    'apps.apps.MyAppConfig',
+    'apps.profile',
+    #'apps.classrooms',
 
 
 ]
