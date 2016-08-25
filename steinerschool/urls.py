@@ -18,13 +18,16 @@ from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
-from apps.profile.views import ClassRoomDetail, ProfileDetail
+from apps.profile.views import ClassRoomDetail, ProfileDetail, MyClassRooms, Search
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^mijn-klassen', ClassRoomDetail.as_view()),
+    url(r'^accounts/login/$', auth_views.login, {'template_name': 'admin/login.html'}, name='login'),
+    url(r'^mijn-klassen', MyClassRooms.as_view(), name="mijn-klassen"),
     url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
     url(r'^profile/(?P<pk>\d+)/$', ProfileDetail.as_view(), name='profile'),
+    url(r'search', Search.as_view(), name='search'),
  	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
  

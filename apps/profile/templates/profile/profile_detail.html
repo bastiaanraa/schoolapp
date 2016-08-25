@@ -6,11 +6,23 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{{ object }}</h2>
-    Kinderen:
-    <ul class='list-unstyled'>
-    {% for child in children %}
-        <li>{{ child }} Klas <a href="{% url 'klas' child.klas %}">{{ child.klas }}</a></li>
-    {% endfor %}
+    <h2>{{ object }}{% if object.klas %}: klas {{ object.klas }}{% endif %}</h2>
+    {% if object.is_ouder %}
+        <h3>Kinderen:</h3>
+        <ul class='list-unstyled'>
+        {% for child in children %}
+            <li>{{ child }} <a href="{% url 'klas' child.klas %}">Klas {{ child.klas }}</a></li>
+        {% endfor %}
+        <h3>Partner?</h3>
+    {% endif %}
+    {% if object.is_leerling %}
+        <h3>Ouders:</h3>
+        <ul class='list-unstyled'>
+        {% for parent in object.parents.all %}
+            <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>
+        {% endfor %}
+        <h3>Broers en zussen</h3>
+    {% endif %}
+    
         
 {% endblock %}

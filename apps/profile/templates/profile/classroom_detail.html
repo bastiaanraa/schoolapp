@@ -19,7 +19,7 @@
                     {% for parent in student.parents.all %}
                     <tr class="{% cycle 'even' 'odd' %}">
                         <td>{% if forloop.first %}{{ student.first_name }}{% endif %}</td>
-                        <td>{{ parent }}</td>
+                        <td><a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a></td>
                         <td>{{ parent.adres }}</td>
                         <td>{{ parent.postcode }} {{ parent.gemeente }}</td>
                         <td>{{ parent.telefoon }}</td>
@@ -29,8 +29,9 @@
                     <tr class="{% cycle 'even' 'odd' %}">
                         <td>{{ student.first_name }}</td>
                         <td>
-                            <a href="{% url 'profile' student.parents.all.0.pk %}"/>{{ student.parents.all.0 }}</a>
-                            <a href="{% url 'profile' student.parents.all.1.pk %}"/>{{ student.parents.all.1 }}</a>
+                            {% for parent in student.parents.all %}
+                                <a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a>
+                            {% endfor %}
                         </td>
                         <td>{{ student.adres }}</td>
                         <td>{{ student.postcode }} {{ student.gemeente }}</td>

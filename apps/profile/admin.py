@@ -27,6 +27,7 @@ class ProfileResource(resources.ModelResource):
 	username = fields.Field(attribute='username')
 	first_name = fields.Field(attribute='first_name', column_name='Voornaam')
 	last_name = fields.Field(attribute='last_name', column_name='Naam')
+	nickname = fields.Field(attribute='nickname', column_name='Nickname')
 
 	aanspreektitel = fields.Field(attribute='aanspreektitel', column_name='Aanspreektitel (Aanschrijf)')
 	geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum', widget=widgets.DateWidget('%d.%m.%Y'))
@@ -43,9 +44,10 @@ class ProfileResource(resources.ModelResource):
 
 	class Meta:
 		model = Profile
-		fields = ('id','last_name','first_name', 'username', 'geboortedatum', \
+		import_id_fields = ('nickname',)
+		fields = ('nickname','id','last_name','first_name', 'username', 'geboortedatum', \
 			'postcode', 'gescheiden', 'klas')
-		#skip_unchanged = True
+		skip_unchanged = True
 
 
 	def dehydrate_first_name(self, user):
@@ -74,15 +76,14 @@ class ProfileResource(resources.ModelResource):
 			try:
 				with transaction.atomic():
 					instance.save()
-					# toevoegen aan klas
-					#if instance.klas in ("P-A", "P-B"):
-					#	classroom = ClassRoom.objects.get(klascode=str(instance.klas))
-					#	instance.klas.add(classroom)
 			except IntegrityError, e:
 				#IntegrityError: (1062, "Duplicate entry 'zzz' for key 'username'")
 				print "save instance: integrity error"
 				print(e)
 				self.student_exists = True
+			except Exception, e:
+				print "nog een andere fout"
+				print e
 		self.after_save_instance(instance, dry_run)
 
 	def before_save_instance(self, instance, dry_run):
@@ -96,32 +97,50 @@ class ProfileResource(resources.ModelResource):
 
 	def after_save_instance(self, instance, dry_run):
 		print 'after_save'
-		child = instance
-		if self.student_exists:
-			child = Profile.objects.get(username=instance.username)
 		if dry_run == False:
+			child = Profile.objects.get(username=instance.username)
 			print "SAVE"
-			if instance.gescheiden:
+			if 1==2:
+			#if instance.gescheiden:
+			#dit is niet nodig want enkel voor domiclie kind, tonen we niet
 				try:
 					with transaction.atomic():
-						parent, created = Profile.objects.get_or_create(username=instance.parent_name, first_name=instance.parent_name, is_ouder=True)
+						parent, created = \
+							Profile.objects.get_or_create( \
+								username=instance.parent_name, 
+								first_name=instance.parent_name, 
+								is_ouder=True,
+								#klas=instance.klas,
+								)
 				except Exception, e:
+					print "except A"
 					raise e
 				try:
 					child.parents.add(parent)
 				except Exception, e:
+					print "except B"
 					raise e
 			else:
 				try:
 					with transaction.atomic():
 						if not instance.parent1 == '':
-							parent1, created = Profile.objects.get_or_create(username=instance.parent1, first_name=instance.parent1, is_ouder=True)
+							parent1, created = Profile.objects.get_or_create( \
+								username=instance.parent1, 
+								first_name=instance.parent1, 
+								is_ouder=True,
+								#klas=instance.klas,
+								)
 							child.parents.add(parent1)
 						if not instance.parent2 == '':
-							parent2, created = Profile.objects.get_or_create(username=instance.parent2, first_name=instance.parent2, is_ouder=True)
+							parent2, created = Profile.objects.get_or_create( \
+								username=instance.parent2, 
+								first_name=instance.parent2, 
+								is_ouder=True,
+								#klas=instance.klas,
+								)
 							child.parents.add(parent2)
 				except Exception, e:
-					print "except B"
+					print "except C"
 					print e
 		
 

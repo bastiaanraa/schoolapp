@@ -33,8 +33,8 @@
         </button>
     <div class="container collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul id="menu-header-menu" class="menu">
-        <li class="menu-item"><a href="/klas">KLASSEN</a></li>
-        <li class="menu-item"><a href="/klas">ZOEK IN SCHOOLGIDS</a></li>
+        <li class="menu-item"><a href="{% url 'mijn-klassen' %}">KLASSEN</a></li>
+        <li class="menu-item"><a href="{% url 'search' %}">ZOEK IN SCHOOLGIDS</a></li>
         <li class="menu-item"><a href="/klas">BESTUUR</a></li>
         <li class="menu-item"><a href="/klas">WERKGROEPEN</a></li>
         <li class="menu-item"><a href="/klas">INFORMATIE</a></li>
@@ -62,7 +62,7 @@
   <div class="container">
     <div class="row">
       <div>
-        FOOTERMENU
+        
       </div>
     </div>
     
@@ -72,7 +72,6 @@
       <a href="#" style="cursor:hand;font-size: 8pt;text-align: center;" >Laat het ons weten!</a><br />
       Vrije Rudolf Steinerschool Gent - Kasteellaan 54 - 9000 Gent - 09/235.28.00 - 
       <a style="font-size: 8pt;text-align: center;" href="mailto:info@steinerschoolgent.be?subject=Informatie over de school via www.steinerschoolgent.be">info@steinerschoolgent.be</a>
-       - <a style="font-size: 8pt;text-align: center;" href="http://feeds.feedburner.com/VrijeRudolfSteinerschoolGent">RSS</a>
     </div>
   
   </div>
@@ -80,10 +79,9 @@
 </div> <!-- wrap -->
 
 
-  <script src="{% static "js/steinerschool.js" %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js">
-  
+  <script src="{% static "js/steinerschool.js" %}"></script>
   </body>
 </html>
