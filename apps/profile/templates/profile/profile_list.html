@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block sidebar-menu %}
+
+
+{% endblock %}
+
+{% block content %}
+<p></p>
+<h2>ZOEK personen</h2>
+<form id="searchform" action="{% url 'search' %}" method="get" accept-charset="utf-8">
+      <button class="searchbutton" type="submit">
+        <i class="fa fa-search"></i>
+      </button>
+      <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+    </form>
+    <p></p>
+    {% for object in object_list %}
+    	<div><a href="{% url 'profile' object.pk %}">{{ object }}</a></div>
+    {% empty %}
+    	Geen resultaten gevonden
+    {% endfor %}
+        
+{% endblock %}
