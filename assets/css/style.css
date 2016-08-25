@@ -1,5 +1,5 @@
 body {
-  background-color: #0F1D30;
+  background-color: #FBFBFB;
 }
 
 h1, h2, h3, nav a {
@@ -10,7 +10,7 @@ header.container {
 	/*height:230px;*/
   background-color:#4E698C;
   padding: 0px;
-  min-width: 960px;
+  /*min-width: 960px;*/
 }
 
 header div.fixed {
@@ -18,7 +18,7 @@ header div.fixed {
 }
 header div.fixed.affix {
   z-index: 10;
-  width: 960px;
+  /*width: 960px;*/
 }
 
 header .sitetitle {
@@ -43,7 +43,7 @@ header .sitetitle {
 #nav.affix {
   top: 30px;
   z-index:10;
-  max-width: 960px;
+  /*max-width: 960px;*/
   width: 100%;
 }
 
@@ -64,16 +64,17 @@ header .sitetitle {
 }
 
 div.col-sm-3.col-md-2.sidebar {
-  margin-left: -20px;
+  /*margin-left: -20px;*/
 }
 
 #wrap {
-  max-width: 960px;
+  /*max-width: 960px;*/
   width: inherit;
 }
 
 #content .row {
-  margin: 10px;
+  background-color: #7297BA;
+  /*margin: 10px;*/
 }
 
 .navbar {
@@ -134,11 +135,14 @@ nav ul li a:hover{
 }
 #rs_breadcrumbs {
   margin-bottom: 15px;
+  /*margin-left: -15px;
+  margin-right: -15px;*/
+}
+
+#content {
   margin-left: -15px;
   margin-right: -15px;
 }
-
-
 .footer
 {
   margin-left: -15px;
@@ -148,7 +152,7 @@ nav ul li a:hover{
 .footer .container
 {
   min-width: 100%;
-  border-top: 5px solid #CC9933;
+  /*border-top: 5px solid #CC9933;*/
   background-color: #7297BA;
 }
 .menu-footer-menu-container ul.menu li {
@@ -201,12 +205,12 @@ ul.textbox {
   padding-left: 25px;
 }
 
-ul li span {
-  float: left;
-  border-right: 1px solid white;
-  margin: 5px;
-  
-  width: 30px;
+table tr.odd {
+  background-color: #BDCCDA;
+}
+
+table tr.even {
+  background-color: #ededf0;
 }
 
 /* Small devices (tablets, 768px and up) */

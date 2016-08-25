@@ -19,11 +19,12 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from apps.profile.views import ClassesList
+from apps.profile.views import ClassRoomDetail, ProfileDetail
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^mijn-klassen', ClassesList.as_view()),
-    url(r'^klas/([\w-]+)/$', ClassesList.as_view(), name='klas'),
+    url(r'^mijn-klassen', ClassRoomDetail.as_view()),
+    url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
+    url(r'^profile/(?P<pk>\d+)/$', ProfileDetail.as_view(), name='profile'),
  	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
  

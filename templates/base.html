@@ -6,7 +6,7 @@
 <!--[if gt IE 8]><!--> 
 <html>
   <head>
-    <title>SCHOOLAPP STEINERSCHOOL</title>
+    <title>Vrije R. Steinerschool Basisschool – Middelbare Steinerschool Vlaanderen Gent</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -20,13 +20,10 @@
   <body>
     <header class="container masthead" role="banner">
     <div class='fixed sitetitle'>
-      <?php bloginfo( 'name' ); ?>
-    </div>
-    <div id="bigheaderimage" class="hidden-xs hidden-sm">
-      <a class="nohover" href="./"><img src="{% static "img/header1.jpg" %}" alt="header image" border="0" /></a>
+      Vrije R. Steinerschool Basisschool – Middelbare Steinerschool Vlaanderen Gent
     </div>
   </header>
-  <div id="wrap" class='container'>
+  <div  class='container'>
   <nav class="navbar navbar-static-top" id="nav" role="navigation">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
@@ -37,6 +34,7 @@
     <div class="container collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul id="menu-header-menu" class="menu">
         <li class="menu-item"><a href="/klas">KLASSEN</a></li>
+        <li class="menu-item"><a href="/klas">ZOEK IN SCHOOLGIDS</a></li>
         <li class="menu-item"><a href="/klas">BESTUUR</a></li>
         <li class="menu-item"><a href="/klas">WERKGROEPEN</a></li>
         <li class="menu-item"><a href="/klas">INFORMATIE</a></li>
@@ -49,7 +47,6 @@
       <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar" id="subnav">
           {% block sidebar-menu %}{% endblock %}
-          <li>Sidemenu</li>
         </ul>
       </div>
       <div class="col-sm-9 col-md-10 main">

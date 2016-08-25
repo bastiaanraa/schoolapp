@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block sidebar-menu %}
+
+
+{% endblock %}
+
+{% block content %}
+    <h2>{{ object }}</h2>
+    Kinderen:
+    <ul class='list-unstyled'>
+    {% for child in children %}
+        <li>{{ child }} Klas <a href="{% url 'klas' child.klas %}">{{ child.klas }}</a></li>
+    {% endfor %}
+        
+{% endblock %}
