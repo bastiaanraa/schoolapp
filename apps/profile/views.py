@@ -13,8 +13,9 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 	def get_context_data(self, *args, **kwargs):
 		# Call the base implementation first to get a context
 		context = super(ClassRoomDetail, self).get_context_data(**kwargs)
-		context['students'] = Profile.objects.select_related('klas').filter(is_leerling=True, klas=self.object).order_by('first_name')
-		context['klassen'] = ClassRoom.objects.all()
+		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).order_by('first_name')
+		context["klasouders"] = Profile.objects.filter(is_klasouder=True, klas_ouder=self.object)
+		context['klassen'] = ClassRoom.objects.all() #hier een context variabele van maken context_processor?
 		return context
 
 
@@ -25,7 +26,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ProfileDetail, self).get_context_data(**kwargs)
 		if self.object.is_ouder:	
-			context['children'] = Profile.objects.select_related('klas').filter(is_leerling=True, parents=self.object)
+			context['children'] = Profile.objects.filter(is_leerling=True, parents=self.object)
 		
 			# zelfde adres! voor partner!
 			#context['partner'] = Profile.objects.filter( \

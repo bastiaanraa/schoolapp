@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block sidebar-menu %}
+
 {% for klas in klassen %}
-    <li><a href="{% url 'klas' klas %}"/>Klas {{klas}}</a></li>
+    <li {% if object == klas %} class="active" {% endif %}>
+        <a href="{% url 'klas' klas %}"/>Klas {{klas}}</a>
+    </li>
 {% endfor %}
 
 {% endblock %}
@@ -10,34 +13,32 @@
 {% block content %}
     <h2>Klas {{ object }}</h2>
     <p>Leerkracht:</p>
-    <p>Klasouder(s):</p>
+    <p>Klasouder(s): {% for klasouder in klasouders %}{{klasouder}}{% endfor %}</p>
     <p>Aantal: {{ students|length }}</p>
     <table>
         <tbody>
+            
             {% for student in students %}
-                {% if student.gescheiden %}
+                <div style="display:none">{% cycle 'even' 'odd' as rowcolors %}</div>
                     {% for parent in student.parents.all %}
-                    <tr class="{% cycle 'even' 'odd' %}">
-                        <td>{% if forloop.first %}{{ student.first_name }}{% endif %}</td>
+                    <tr class="{{ rowcolors }}">
+                        <td>{% if forloop.first %}{{ student.first_name }}&nbsp;{{ student.last_name }}{% endif %}</td>
                         <td><a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a></td>
-                        <td>{{ parent.adres }}</td>
-                        <td>{{ parent.postcode }} {{ parent.gemeente }}</td>
+                        <td>{{ parent.telefoon }}</td>
+                        <td>{{ parent.email }}</td>
+                        <td>
+                            {% ifchanged %}
+                                {{ parent.adres }}
+                            {% endifchanged %}
+                        </td>
+                        <td>
+                            {% ifchanged %}
+                                {{ parent.postcode }} {{ parent.get_gemeente|lower|capfirst }}
+                            {% endifchanged %}
+                        </td>
                         <td>{{ parent.telefoon }}</td>
                     </tr>
                     {% endfor %}
-                {% else %}
-                    <tr class="{% cycle 'even' 'odd' %}">
-                        <td>{{ student.first_name }}</td>
-                        <td>
-                            {% for parent in student.parents.all %}
-                                <a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a>
-                            {% endfor %}
-                        </td>
-                        <td>{{ student.adres }}</td>
-                        <td>{{ student.postcode }} {{ student.gemeente }}</td>
-                        <td>{{ student.parents.all.0.telefoon }}</td>
-                    </tr>
-                {% endif %}
             {% endfor %}
         </tbody>
     </table>

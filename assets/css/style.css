@@ -133,6 +133,16 @@ nav ul li a:hover{
   padding-left: 10px;
   list-style-type: disc;
 }
+.nav.nav-sidebar > li > a {
+  padding: 5px;
+}
+.nav.nav-sidebar > li > a:focus, .nav > li > a:hover {
+  background-color: #4E698C;
+}
+.nav.nav-sidebar > li.active {
+  background-color: #4E698C;
+}
+
 #rs_breadcrumbs {
   margin-bottom: 15px;
   /*margin-left: -15px;
@@ -144,6 +154,13 @@ nav ul li a:hover{
   margin-left: -15px;
   margin-right: -15px;
   padding-top: 15px;
+}
+
+td {
+  padding: 2px;
+}
+table tr td a:visited {
+  color: #337ab7;
 }
 .footer
 {
