@@ -7,18 +7,31 @@
 
 {% block content %}
 <p></p>
-<h2>ZOEK personen</h2>
+<h1>ZOEK personen</h1>
 <form id="searchform" action="{% url 'search' %}" method="get" accept-charset="utf-8">
-      <button class="searchbutton" type="submit">
-        <i class="fa fa-search"></i>
-      </button>
-      <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-    </form>
-    <p></p>
-    {% for object in object_list %}
-    	<div><a href="{% url 'profile' object.pk %}">{{ object }}</a></div>
-    {% empty %}
-    	Geen resultaten gevonden
-    {% endfor %}
+  <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+  <button class="searchbutton" type="submit">
+    <i class="fa fa-search"></i>
+  </button>
+</form>
+<p></p>
+{% for object in object_list %}
+	<div>
+    <a href="{% url 'profile' object.pk %}">{{ object }}</a>
+    {% if object.klas %}klas {{ object.klas }}{% endif %}<br />
+    {{ object.adres }}<br />
+    {{ object.postcode }} {{ object.get_gemeente }}<br />
+    {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+    {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+    {% if object.email %}{{ object.email }}<br />{% endif %}
+    {% for child in object.parents.all %}
+      {{ child }} {% if child.klas %}(<a href="{% url 'klas' child.klas %}">klas {{child.klas}}</a>){% endif %}&nbsp;{% endfor %}
+    <hr>
+  </div>
+{% empty %}
+  {% if searchterm %}
+	 Geen resultaten gevonden
+   {% endif %}
+{% endfor %}
         
 {% endblock %}

@@ -24,7 +24,7 @@
                     <tr class="{{ rowcolors }}">
                         <td>{% if forloop.first %}{{ student.first_name }}&nbsp;{{ student.last_name }}{% endif %}</td>
                         <td><a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a></td>
-                        <td>{{ parent.telefoon }}</td>
+                        <td>{{ parent.gsm }}</td>
                         <td>{{ parent.email }}</td>
                         <td>
                             {% ifchanged %}
@@ -36,7 +36,11 @@
                                 {{ parent.postcode }} {{ parent.get_gemeente|lower|capfirst }}
                             {% endifchanged %}
                         </td>
-                        <td>{{ parent.telefoon }}</td>
+                        <td>
+                            {% ifchanged %}
+                                {{ parent.telefoon }}
+                            {% endifchanged %}
+                        </td>
                     </tr>
                     {% endfor %}
             {% endfor %}

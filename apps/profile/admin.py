@@ -180,9 +180,9 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas']
 	fieldsets = (
-		(None, {'fields': ('first_name', 'last_name','email', 'password')}),
+		(None, {'fields': ('username','first_name', 'last_name','email', 'password')}),
 		('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
-		('Personal info', {'fields': ('geboortedatum','adres','postcode', 'gemeente', 'telefoon', 'email')}),
+		('Personal info', {'fields': ('geboortedatum','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
 		('Gezin', {'fields': ('gescheiden','parents',)}),
 		('Klas', {'fields': ('klas',)}),
 		('Klasouder', {'fields': ('klas_ouder',)}),

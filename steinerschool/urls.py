@@ -20,14 +20,22 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from apps.profile.views import ClassRoomDetail, ProfileDetail, MyClassRooms, Search
+from apps.profile.views import ClassRoomDetail, ProfileDetail, MyClassRoom, Search
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', auth_views.login, {'template_name': 'admin/login.html'}, name='login'),
-    url(r'^mijn-klassen', MyClassRooms.as_view(), name="mijn-klassen"),
+    url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^mijn-klassen', MyClassRoom.as_view(), name="mijn-klassen"),
     url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
     url(r'^profile/(?P<pk>\d+)/$', ProfileDetail.as_view(), name='profile'),
     url(r'search', Search.as_view(), name='search'),
- 	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
  
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
+
+admin.site.site_title = "SCHOOL INTERN"
+admin.site.site_header = "SCHOOL INTERN"

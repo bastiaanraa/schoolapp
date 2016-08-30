@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.text import capfirst
 
 class ClassRoom(models.Model):
 	klascode = models.CharField(max_length=10, unique=True)
@@ -28,6 +29,7 @@ class Profile(AbstractUser):
 	gemeente = models.CharField("Gemeente", max_length=255, blank=True)
 	land = models.CharField("Land", max_length=255, default='België', blank=True)
 	telefoon = models.CharField("Telefoon", max_length=50, blank=True)
+	gsm = models.CharField("Telefoon", max_length=50, blank=True)
 	#domicilietelefoon = models.CharField("Domicilie Telefoon", max_length=50, blank=True)
 	geboortedatum = models.DateField("Geboortedatum", blank=True, null=True)
 	nickname = models.CharField("nickname", max_length=255, blank=True)
@@ -55,4 +57,4 @@ class Profile(AbstractUser):
 		return "%s %s" % (self.first_name, self.last_name)
 
 	def get_gemeente(self):
-		return self.gemeente.split(' ')[0]
+		return capfirst(self.gemeente.split(' ')[0].lower())

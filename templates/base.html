@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="{% static "css/steinerschool.css" %}">
     <link rel="stylesheet" href="{% static "css/bootstrap-overrides.css" %}">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
-    
+    {% block extrastyle %}{% endblock %}
   </head>
-  <body>
+  <body class="{% block bodyclass %}{% endblock %}">
     <header class="container masthead" role="banner">
     <div class='fixed sitetitle'>
       Vrije R. Steinerschool Basisschool – Middelbare Steinerschool Vlaanderen Gent
@@ -69,7 +69,7 @@
     <div class="footerend">
       <br />
       Iets niet juist op deze pagina? 
-      <a href="#" style="cursor:hand;font-size: 8pt;text-align: center;" >Laat het ons weten!</a><br />
+      Laat het ons weten via <a href="mailto:website@steinerschoolgent.be">website@steinerschoolgent.be</a><br />
       Vrije Rudolf Steinerschool Gent - Kasteellaan 54 - 9000 Gent - 09/235.28.00 - 
       <a style="font-size: 8pt;text-align: center;" href="mailto:info@steinerschoolgent.be?subject=Informatie over de school via www.steinerschoolgent.be">info@steinerschoolgent.be</a>
     </div>

@@ -76,6 +76,15 @@ div.col-sm-3.col-md-2.sidebar {
   background-color: #7297BA;
   /*margin: 10px;*/
 }
+#content-main.login {
+  width: 28em;
+  min-width: 300px;
+  background-color: #4E698C;
+  padding: 1em;
+}
+#content-main.login h1 {
+  color: unset;
+}
 
 .navbar {
   border-bottom: 1px solid white;
@@ -142,7 +151,12 @@ nav ul li a:hover{
 .nav.nav-sidebar > li.active {
   background-color: #4E698C;
 }
-
+.login .form-row {
+    padding: 4px 0;
+    float: left;
+    width: 100%;
+    border-bottom: none;
+}
 #rs_breadcrumbs {
   margin-bottom: 15px;
   /*margin-left: -15px;
@@ -152,7 +166,7 @@ nav ul li a:hover{
 #content {
   background-color: #7297BA;
   margin-left: -15px;
-  margin-right: -15px;
+  /*margin-right: -15px;*/
   padding-top: 15px;
 }
 
@@ -172,7 +186,7 @@ table tr td a:visited {
 {
   min-width: 100%;
   /*border-top: 5px solid #CC9933;*/
-  background-color: #7297BA;
+  /*background-color: #7297BA;*/
 }
 .menu-footer-menu-container ul.menu li {
   display: inline;

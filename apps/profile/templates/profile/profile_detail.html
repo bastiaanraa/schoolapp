@@ -6,22 +6,35 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{{ object }}{% if object.klas %}: klas {{ object.klas }}{% endif %}</h2>
+    <h1>{{ object }}{% if object.klas %}: klas {{ object.klas }}{% endif %}</h1>
+    <p>{{ object.adres }}<br />
+    {{ object.postcode }} {{ object.get_gemeente }}<br />
+    {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+    {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+    {% if object.email %}{{ object.email }}{% endif %}</p>
     {% if object.is_ouder %}
-        <h3>Kinderen:</h3>
+        <h2>Kinderen:</h2>
         <ul class='list-unstyled'>
         {% for child in children %}
             <li>{{ child }} <a href="{% url 'klas' child.klas %}">Klas {{ child.klas }}</a></li>
         {% endfor %}
-        <h3>Partner?</h3>
+        {% if partner %}
+            <h2>Partner:</h2>
+            {{ partner }}
+        {% endif %}
     {% endif %}
     {% if object.is_leerling %}
-        <h3>Ouders:</h3>
+        <h2>Ouders:</h2>
         <ul class='list-unstyled'>
         {% for parent in object.parents.all %}
             <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>
         {% endfor %}
-        <h3>Broers en zussen</h3>
+        {% if siblings %}
+            <h2>Broers en zussen:</h2>
+            {% for sibling in siblings %}
+                <li>{{ sibling }} <a href="{% url 'klas' sibling.klas %}">Klas {{ sibling.klas }}</a></li>
+            {% endfor %}
+        {% endif %}
     {% endif %}
     
         
