@@ -13,10 +13,19 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from ConfigParser import ConfigParser
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+########## INI CONFIGURATION
+# See: https://code.djangoproject.com/wiki/SplitSettings
+PASSWORD_FILE = os.path.join(BASE_DIR, './steinerschool/passwords.ini')
+
+passwords = ConfigParser()
+passwords.read(PASSWORD_FILE)
+########## END INI CONFIGURATION
 
 
 # Quick-start development settings - unsuitable for production
@@ -102,8 +111,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'schoolapp',
-        'USER': 'root',
-        'PASSWORD': 'letmein',
+        'USER': passwords.get('database', 'user'),
+        'PASSWORD': passwords.get('database', 'password'),
     }
 }
 
