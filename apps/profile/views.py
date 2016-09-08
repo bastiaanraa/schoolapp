@@ -13,8 +13,10 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 	def get_context_data(self, *args, **kwargs):
 		# Call the base implementation first to get a context
 		context = super(ClassRoomDetail, self).get_context_data(**kwargs)
+		
 		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).order_by('first_name')
-		context["klasouders"] = Profile.objects.filter(is_klasouder=True, klas_ouder=self.object)
+		#print self.object.klas_set.all() DIT MOET TOCH WERKEN???
+		
 		context['klassen'] = ClassRoom.objects.all() #hier een context variabele van maken context_processor?
 		return context
 
@@ -59,8 +61,10 @@ class MyClassRoom(LoginRequiredMixin, DetailView):
 	myKlas = None
 
 	def dispatch(self, request, *args, **kwargs):
-		
-		self.myKlas = self.request.user.parents.all()[0].klas
+		try:
+			self.myKlas = self.request.user.parents.all()[0].klas
+		except:
+			pass
 		return super(MyClassRoom, self).dispatch(request, *args, **kwargs)
 
 	def get_context_data(self, *args, **kwargs):
@@ -77,9 +81,11 @@ class MyClassRoom(LoginRequiredMixin, DetailView):
 		The return value must be an iterable and may be an instance of
 		`QuerySet` in which case `QuerySet` specific behavior will be enabled.
 		"""
-		print self.myKlas
-		object = ClassRoom.objects.get(klasnaam=self.myKlas)
-		print object
+
+		try:
+			object = ClassRoom.objects.get(klasnaam=self.myKlas)
+		except:
+			object = None
 		return object
 
 class Search(LoginRequiredMixin, ListView):
@@ -106,3 +112,13 @@ class Search(LoginRequiredMixin, ListView):
 			)
 
 		return result.filter(is_superuser=False)
+
+class ClassRooms(LoginRequiredMixin, ListView):
+	model = ClassRoom
+
+	"""
+	def get_context_data(self, *args, **kwargs):
+		context = super(ClassRooms, self).get_context_data(*args, **kwargs)
+		# add extra context
+		retrun context
+	"""

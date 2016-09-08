@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 
 {% block sidebar-menu %}
-
-{% for klas in klassen %}
-    <li {% if object == klas %} class="active" {% endif %}>
-        <a href="{% url 'klas' klas %}"/>Klas {{klas}}</a>
-    </li>
-{% endfor %}
-
+    {% for klas in klassen %}
+        <li {% if object == klas %} class="active" {% endif %}>
+            <a href="{% url 'klas' klas %}">Klas {{klas}}</a>
+        </li>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}
+{% if object %}
     <h2>Klas {{ object }}</h2>
-    <p>Leerkracht:</p>
-    <p>Klasouder(s): {% for klasouder in klasouders %}{{klasouder}}{% endfor %}</p>
+    <p>Leerkracht: {% for leerkracht in object.leerkracht.all %}{{leerkracht}}{%endfor%}</p>
+    <p>Klasouder(s): {% for klasouder in object.klasouders.all %}{{klasouder}}{% endfor %}</p>
     <p>Aantal: {{ students|length }}</p>
     <table>
         <tbody>
@@ -22,7 +21,7 @@
                 <div style="display:none">{% cycle 'even' 'odd' as rowcolors %}</div>
                     {% for parent in student.parents.all %}
                     <tr class="{{ rowcolors }}">
-                        <td>{% if forloop.first %}{{ student.first_name }}&nbsp;{{ student.last_name }}{% endif %}</td>
+                        <td>{% if forloop.first %}{{ student }}{% endif %}</td>
                         <td><a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a></td>
                         <td>{{ parent.gsm }}</td>
                         <td>{{ parent.email }}</td>
@@ -46,5 +45,5 @@
             {% endfor %}
         </tbody>
     </table>
-        
+{% endif %}      
 {% endblock %}

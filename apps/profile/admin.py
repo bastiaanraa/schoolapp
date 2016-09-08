@@ -32,24 +32,33 @@ class ProfileResource(resources.ModelResource):
 	geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum', widget=widgets.DateWidget('%d.%m.%Y'))
 	
 	aanspreektitel = fields.Field(attribute='aanspreektitel', column_name='Aanspreektitel (Aanschrijf)')
-	parent1 = fields.Field(attribute="parent1", column_name="Vader")
-	parent2 = fields.Field(attribute="parent2", column_name="Moeder")
+	aanspreeknaam = fields.Field(attribute="aanpspreeknaam", column_name='Aanspreeknaam (Aanschrijf)')
+	parent1_voornaam = fields.Field(attribute="parent1_voornaam", column_name="Voornaam vader")
+	parent1_naam = fields.Field(attribute="parent1_naam", column_name="Familienaam vader")
+	parent2_voornaam = fields.Field(attribute="parent2_voornaam", column_name="Voornaam moeder")
+	parent2_naam = fields.Field(attribute="parent2_naam", column_name="Familienaam moeder")
+	adres = fields.Field(attribute="adres",column_name='Domicilie-adres')
 	address = fields.Field(attribute="address",column_name='Aanschrijfadres')
 	postcode = fields.Field(attribute='postcode', column_name='Hoofdpostnr (Aanschrijf)')
 	gemeente = fields.Field(attribute='gemeente', column_name='Deelgemeente (Aanschrijf)')
 	parent1_email = fields.Field(attribute="parent1_email", column_name="E-mail vader")
 	parent2_email = fields.Field(attribute="parent2_email", column_name="E-mail moeder")
+	#parent1_telefoon = fields.Field(attribute="parent1_telefoon", column_name="Telefoon vader")
+	#parent2_telefoon = fields.Field(attribute="parent1_telefoon", column_name="Telefoon moeder")
+	parent1_gsm = fields.Field(attribute="parent1_gsm", column_name="GSM Vader")
+	parent2_gsm = fields.Field(attribute="parent2_gsm", column_name="GSM Moeder")
+	telefoon = fields.Field(attribute="telefoon", column_name="Domicilie-telefoon")
 	 
-	parent_gescheiden = fields.Field(attribute='parent_name', column_name='Aanspreeknaam (Aanschrijf)')
+	#parent_gescheiden = fields.Field(attribute='parent_name', column_name='Aanspreeknaam (Aanschrijf)')
 	
 	klas = fields.Field(attribute="klas", column_name="Klascode", widget=widgets.ForeignKeyWidget(ClassRoom, 'klascode'))
 	
 
 	class Meta:
 		model = Profile
-		import_id_fields = ('nickname',)
+		import_id_fields = ('nickname',) #rijksregister!!
 		fields = ('nickname','last_name','first_name', 'username', 'geboortedatum', \
-			'postcode', 'gescheiden', 'klas')
+			'postcode', 'gescheiden', 'klas', 'telefoon', )
 		skip_unchanged = True
 		report_skipped = True
 
@@ -101,25 +110,52 @@ class ProfileResource(resources.ModelResource):
 
 	def after_save_instance(self, instance, dry_run):
 		print 'after_save'
+		# om te weten met welke parent we te maken hebben
+		
 		
 		if dry_run == False:
 			password = make_password('123')
 			child = Profile.objects.get(username=instance.username)
 			
 			if instance.gescheiden:
+				email = ''
+				voornaam = ''
+				naam = ''
+				gsm = ''
+				print instance.aanpspreeknaam
+				if instance.aanpspreeknaam == instance.parent1_naam+' '+instance.parent1_voornaam:
+					print 'Parent 1'
+					email = instance.parent1_email
+					voornaam = instance.parent1_voornaam
+					naam = instance.parent1_naam
+					gsm = instance.parent1_gsm	
+				elif instance.aanpspreeknaam == instance.parent2_naam+' '+instance.parent2_voornaam:
+					print 'Parent 2'
+					email = instance.parent2_email
+					voornaam = instance.parent2_voornaam
+					naam = instance.parent2_naam
+					gsm = instance.parent2_gsm
+				
+				username = email
+				if username == '':
+						username = instance.aanpspreeknaam
 				try:
 					with transaction.atomic():
-						parent = Profile(username=instance.parent_name, 
+						parent = Profile(username=username, 
 								password=password,
-								first_name=instance.parent_name, 
+								first_name=voornaam,
+								last_name=naam,
 								is_ouder=True,
 								adres=instance.address,
 								gemeente=instance.gemeente,
 								postcode=instance.postcode,
+								email = email,
+								gsm = gsm,
+								telefoon= instance.telefoon,
 								)
 						parent.save()
 				except IntegrityError, e:
-					parent = Profile.objects.get(username=instance.parent_name)
+					parent = Profile.objects.get(username=username) #?
 				except Exception, e:
 					print "except A"
 					raise e
@@ -132,42 +168,73 @@ class ProfileResource(resources.ModelResource):
 			else:
 				try:
 					
-					if not instance.parent1 == '':
+					#is er een ouder1?
+					if not instance.parent1_naam == '':
+						#heeft email?
+						username = instance.parent1_email
+						if username == '':
+							username = instance.parent1_voornaam+instance.parent1_naam
+
 						try:
 							parent1 = Profile(
-								username=instance.parent1,
+								username=username,
 								password=password,
-								first_name=instance.parent1, 
+								first_name=instance.parent1_voornaam,
+								last_name=instance.parent1_naam,
 								is_ouder=True,
 								adres=instance.address,
 								gemeente=instance.gemeente,
 								postcode=instance.postcode,
+								email = instance.parent1_email,
+								gsm = instance.parent1_gsm,
+								telefoon=instance.telefoon
 								)
 							with transaction.atomic():
 								parent1.save()
+						except IntegrityError, e:
+							parent1 = Profile.objects.get(username=username)
 						except Exception, e:
-							parent1 = Profile.objects.get(username=instance.parent1)
-							#raise e
-						with transaction.atomic():
-							child.parents.add(parent1)
-					if not instance.parent2 == '':
+							print e
+						
 						try:
+							with transaction.atomic():
+								child.parents.add(parent1)
+						except Exception, e:
+							raise e
+						
+					
+					#is er een ouder2
+					if not instance.parent2_naam == '':
+						username = instance.parent2_email
+						if username == '':
+							username = instance.parent2_voornaam+instance.parent2_naam
+						try:
+							print username
 							parent2 = Profile(
-								username=instance.parent2,
+								username=username,
 								password=password,
-								first_name=instance.parent2, 
+								first_name=instance.parent2_voornaam,
+								last_name=instance.parent2_naam,
 								is_ouder=True,
 								adres=instance.address,
 								gemeente=instance.gemeente,
 								postcode=instance.postcode,
+								email = instance.parent2_email,
+								gsm = instance.parent2_gsm,
+								telefoon = instance.telefoon,
 								)
 							with transaction.atomic():
 								parent2.save()
+						except IntegrityError, e:
+							parent2 = Profile.objects.get(username=username)
 						except Exception, e:
-							parent2 = Profile.objects.get(username=instance.parent2)
-							#raise e
-						with transaction.atomic():
-							child.parents.add(parent2)
+							print e
+						
+						try:
+							with transaction.atomic():
+								child.parents.add(parent2)
+						except Exception, e:
+							raise e
 				except Exception, e:
 					print "except C"
 					print e
@@ -186,17 +253,18 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		('Gezin', {'fields': ('gescheiden','parents',)}),
 		('Klas', {'fields': ('klas',)}),
 		('Klasouder', {'fields': ('klas_ouder',)}),
+		('Leerkracht', {'fields': ('klasleerkracht',)}),
 		('Permissions', {'fields': ('is_superuser',)}),
 	)
 	filter_horizontal = ('parents',)
 
-	def formfield_for_manytomany(self, db_field, request, **kwargs):
+	#def formfield_for_manytomany(self, db_field, request, **kwargs):
 		# enkel tonen bij leerlingen?
 
 		#enkel ouders in lijst_
-		if db_field.name == "parents":
-			kwargs["queryset"] = Profile.objects.filter(is_ouder=True)
-		return super(UserAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+		#if db_field.name == "parents":
+		#	kwargs["queryset"] = Profile.objects.filter(is_ouder=True)
+		#return super(UserAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class StudentInline(admin.TabularInline):

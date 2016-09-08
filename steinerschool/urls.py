@@ -20,13 +20,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from apps.profile.views import ClassRoomDetail, ProfileDetail, MyClassRoom, Search
+from apps.profile.views import ClassRooms, ClassRoomDetail, ProfileDetail, MyClassRoom, Search
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^mijn-klassen', MyClassRoom.as_view(), name="mijn-klassen"),
     url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
+    url(r'^klassen', ClassRooms.as_view(), name='klassen'),
     url(r'^profile/(?P<pk>\d+)/$', ProfileDetail.as_view(), name='profile'),
     url(r'search', Search.as_view(), name='search'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

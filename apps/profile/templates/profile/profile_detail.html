@@ -6,14 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ object }}{% if object.klas %}: klas {{ object.klas }}{% endif %}</h1>
+    <h1>{{ object }}{% if object.klas %} <a href="{% url 'klas' object.klas %}">klas {{ object.klas }}</a>{% endif %}</h1>
     <p>{{ object.adres }}<br />
     {{ object.postcode }} {{ object.get_gemeente }}<br />
     {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
     {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
     {% if object.email %}{{ object.email }}{% endif %}</p>
     {% if object.is_ouder %}
-        <h2>Kinderen:</h2>
+        <h2>Kind(eren):</h2>
         <ul class='list-unstyled'>
         {% for child in children %}
             <li>{{ child }} <a href="{% url 'klas' child.klas %}">Klas {{ child.klas }}</a></li>
@@ -24,7 +24,7 @@
         {% endif %}
     {% endif %}
     {% if object.is_leerling %}
-        <h2>Ouders:</h2>
+        <h2>Ouder(s):</h2>
         <ul class='list-unstyled'>
         {% for parent in object.parents.all %}
             <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>

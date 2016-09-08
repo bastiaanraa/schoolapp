@@ -167,9 +167,15 @@ nav ul li a:hover{
   background-color: #7297BA;
   margin-left: -15px;
   /*margin-right: -15px;*/
-  padding-top: 15px;
+  /*padding-top: 15px;*/
+}
+#content a:link{
+  font-size: 10pt;
 }
 
+table {
+  font-size: 9pt;
+}
 td {
   padding: 2px;
 }

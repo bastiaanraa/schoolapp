@@ -29,7 +29,7 @@ class Profile(AbstractUser):
 	gemeente = models.CharField("Gemeente", max_length=255, blank=True)
 	land = models.CharField("Land", max_length=255, default='België', blank=True)
 	telefoon = models.CharField("Telefoon", max_length=50, blank=True)
-	gsm = models.CharField("Telefoon", max_length=50, blank=True)
+	gsm = models.CharField("GSM", max_length=50, blank=True)
 	#domicilietelefoon = models.CharField("Domicilie Telefoon", max_length=50, blank=True)
 	geboortedatum = models.DateField("Geboortedatum", blank=True, null=True)
 	nickname = models.CharField("nickname", max_length=255, blank=True)
@@ -46,6 +46,7 @@ class Profile(AbstractUser):
 	
 	klas = models.ForeignKey(ClassRoom, on_delete=models.PROTECT, null=True, blank=True)
 	klas_ouder = models.ManyToManyField('ClassRoom', blank=True, related_name='klasouders')
+	klasleerkracht = models.ManyToManyField('ClassRoom', blank=True, related_name='leerkracht')
 	
 	def __str__(self):
 		try:
