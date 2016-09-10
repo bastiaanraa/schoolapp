@@ -7,7 +7,7 @@
 
 {% block content %}
 <p></p>
-<h1>ZOEK personen</h1>
+<h1>Zoek leerlingen, ouders, leerkrachten, medewerkers</h1>
 <form id="searchform" action="{% url 'search' %}" method="get" accept-charset="utf-8">
   <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
   <button class="searchbutton" type="submit">
@@ -18,14 +18,15 @@
 {% for object in object_list %}
 	<div>
     <a href="{% url 'profile' object.pk %}">{{ object }}</a>
-    {% if object.klas %}klas {{ object.klas }}{% endif %}<br />
-    {{ object.adres }}<br />
-    {{ object.postcode }} {{ object.get_gemeente }}<br />
+    {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
+    {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
+    {% if object.adres %}{{ object.adres }}<br />
+    {{ object.postcode }} {{ object.get_gemeente }}<br />{% endif %}
     {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
     {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
     {% if object.email %}{{ object.email }}<br />{% endif %}
     {% for child in object.parents.all %}
-      {{ child }} {% if child.klas %}(<a href="{% url 'klas' child.klas %}">klas {{child.klas}}</a>){% endif %}&nbsp;{% endfor %}
+      <a href="{% url 'profile' child.pk %}">{{ child }}</a> {% if child.klas %}(<a href="{% url 'klas' child.klas %}"><i>klas {{child.klas}}</i></a>){% endif %}&nbsp;{% endfor %}
     <hr>
   </div>
 {% empty %}

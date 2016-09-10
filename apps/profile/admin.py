@@ -9,6 +9,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.hashers import make_password
+from django.contrib.admin import helpers
+from django.template.response import TemplateResponse
 from django.db import transaction, IntegrityError
 
 from django.utils import encoding
@@ -114,7 +116,6 @@ class ProfileResource(resources.ModelResource):
 		
 		
 		if dry_run == False:
-			password = make_password('123')
 			child = Profile.objects.get(username=instance.username)
 			
 			if instance.gescheiden:
@@ -139,10 +140,12 @@ class ProfileResource(resources.ModelResource):
 				username = email
 				if username == '':
 						username = instance.aanpspreeknaam
+
+				# BETER: eerst kijken of ouder bestaat, dan ofwel update or create ?!
+
 				try:
 					with transaction.atomic():
-						parent = Profile(username=username, 
-								password=password,
+						parent = Profile(username=username,
 								first_name=voornaam,
 								last_name=naam,
 								is_ouder=True,
@@ -178,7 +181,6 @@ class ProfileResource(resources.ModelResource):
 						try:
 							parent1 = Profile(
 								username=username,
-								password=password,
 								first_name=instance.parent1_voornaam,
 								last_name=instance.parent1_naam,
 								is_ouder=True,
@@ -212,7 +214,6 @@ class ProfileResource(resources.ModelResource):
 							print username
 							parent2 = Profile(
 								username=username,
-								password=password,
 								first_name=instance.parent2_voornaam,
 								last_name=instance.parent2_naam,
 								is_ouder=True,
@@ -244,7 +245,7 @@ class ProfileResource(resources.ModelResource):
 class UserAdmin(ImportMixin, BaseUserAdmin):
 	resource_class = ProfileResource
 	#inlines = (ProfileInline, )
-
+	list_filter = ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas']
 	fieldsets = (
 		(None, {'fields': ('username','first_name', 'last_name','email', 'password')}),
@@ -257,6 +258,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		('Permissions', {'fields': ('is_superuser',)}),
 	)
 	filter_horizontal = ('parents',)
+	actions = ['send_password_selected', 'send_password_all']
 
 	#def formfield_for_manytomany(self, db_field, request, **kwargs):
 		# enkel tonen bij leerlingen?
@@ -265,6 +267,71 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		#if db_field.name == "parents":
 		#	kwargs["queryset"] = Profile.objects.filter(is_ouder=True)
 		#return super(UserAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+	def changelist_view(self, request, extra_context=None):
+		if 'action' in request.POST and request.POST['action'] == 'send_password_all':
+			if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+				post = request.POST.copy()
+				for u in Profile.objects.all():
+					post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
+				request._set_post(post)
+		return super(UserAdmin, self).changelist_view(request, extra_context)
+
+	def send_password_mail(self, user):
+		from django.core.mail import send_mail
+		# WAT ALS GEBRUIKS HUN EMAIL AANGEPAST HEBBEN???
+
+		send_mail(
+			'Login gegevens voor steinerschoolgent.be', 
+			"""Beste """+ user.first_name+""",\n
+Dit zijn uw login gegevens voor het afgeschermde gedeelte van https://intern.steinerschoolgent.be: 
+\n
+gebruikersnaam: """+user.email+"""
+wachtwoord: """+user.make_pw_hash(user.username)+"""\n
+\n
+Met beste groeten en veel surfplezier!
+
+Margot Rondel
+Medewerker Administratie R. Steinerschool
+""", 
+			'website@steinerschoolgent.be',
+			[user.email], 
+			fail_silently=False)
+
+	def send_password_selected(self, request, queryset):
+		if request.POST.get('post'):
+			for i in queryset:
+				if i.email:
+					self.send_password_mail(i)
+			self.message_user(request, "Mail sent successfully ")
+		else:
+			context = {
+				'queryset': queryset,
+				'action':'send_password_selected',
+				'action_checkbox_name': helpers.ACTION_CHECKBOX_NAME,
+			}
+			return TemplateResponse(request, 'admin/sendmail.html',
+				context)
+	
+	send_password_selected.short_description = "Verstuur wachtwoord naar geselecteerde gebruikers"
+
+	def send_password_all(self, request, queryset):
+		queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_leerling=False).exclude(email='')
+		if request.POST.get('post'):
+			for i in queryset:
+				if i.email:
+					self.send_password_mail(i)
+			self.message_user(request, "Mail sent successfully ")
+		else:
+			context = {
+				'queryset': queryset,
+				'action': 'send_password_all',
+				'action_checkbox_name': helpers.ACTION_CHECKBOX_NAME,
+			}
+			return TemplateResponse(request, 'admin/sendmail.html',
+				context)
+	
+	send_password_all.short_description = "Verstuur wachtwoord naar ALLE gebruikers"
 
 
 class StudentInline(admin.TabularInline):

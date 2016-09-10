@@ -169,15 +169,15 @@ nav ul li a:hover{
   /*margin-right: -15px;*/
   /*padding-top: 15px;*/
 }
-#content a:link{
+#content table a:link{
   font-size: 10pt;
 }
 
-table {
+table td {
   font-size: 9pt;
 }
 td {
-  padding: 2px;
+  padding: 1px;
 }
 table tr td a:visited {
   color: #337ab7;

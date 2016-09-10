@@ -3,8 +3,11 @@
 
 from __future__ import unicode_literals
 
+import hashlib
+
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
+
 from django.utils.text import capfirst
 
 class ClassRoom(models.Model):
@@ -20,6 +23,11 @@ class ClassRoom(models.Model):
 			
 	def __unicode__(self):
 		return "%s" % (self.klasnaam)
+
+class ProfileManager(models.Manager):
+	#custom manager
+	def has_email(self):
+		return Profile.objects.filter(is_active=True).exclude(email='')
 
 class Profile(AbstractUser):
 	email = models.EmailField(db_index = True, blank=True)
@@ -47,6 +55,9 @@ class Profile(AbstractUser):
 	klas = models.ForeignKey(ClassRoom, on_delete=models.PROTECT, null=True, blank=True)
 	klas_ouder = models.ManyToManyField('ClassRoom', blank=True, related_name='klasouders')
 	klasleerkracht = models.ManyToManyField('ClassRoom', blank=True, related_name='leerkracht')
+
+	objects = UserManager()
+	has_email = ProfileManager()
 	
 	def __str__(self):
 		try:
@@ -59,3 +70,34 @@ class Profile(AbstractUser):
 
 	def get_gemeente(self):
 		return capfirst(self.gemeente.split(' ')[0].lower())
+
+	
+	def make_pw_hash(self, user_name):
+		#Function to create hashed password
+		salt = '2016'
+		h = hashlib.md5(self.username+salt).digest().encode('base64')[:8]
+		return h
+
+	def save(self, *args, **kwargs):
+		if self.pk is None:
+			#set password only for new objects
+			self.set_password(self.make_pw_hash(self.username))
+			super(Profile, self).save(*args, **kwargs)
+
+from csvImporter.model import CsvModel
+from csvImporter import fields
+
+class MyCsvModel(CsvModel):
+	#mycsv = MyCsvModel.import_data(data=open("steinerschool/leerkrachten.csv"))
+
+	last_name=fields.CharField()
+	first_name=fields.CharField()
+	email=fields.CharField()
+	is_medewerker=fields.BooleanField()
+	username = fields.CharField()
+	
+	class Meta:
+		delimiter = str(",")
+		dbModel = Profile
+		silent_failure = True
+		update = {'keys': ["username",]}
