@@ -70,8 +70,9 @@ class Profile(AbstractUser):
 	def save(self, *args, **kwargs):
 		if self.pk is None:
 			#set password only for new objects
-			self.set_password(self.make_pw_hash(self.username))
-			super(Profile, self).save(*args, **kwargs)
+			if not self.is_superuser:
+				self.set_password(self.make_pw_hash(self.username))
+		super(Profile, self).save(*args, **kwargs)
 
 from csvImporter.model import CsvModel
 from csvImporter import fields
