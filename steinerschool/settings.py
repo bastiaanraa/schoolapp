@@ -53,15 +53,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'django.contrib.messages',  # to enable messages framework (see :ref:`Enable messages <enable-messages>`)
+    'django.contrib.flatpages',
 
-
-    #
+    'tinymce',
+    #'flatpages_tinymce',
     'django_extensions',
     'import_export',
     'debug_toolbar',
 
     'apps.apps.MyAppConfig',
+    'classrooms.apps.ClassRoomsConfig',
     'apps.profile',
+    'apps.content',
 
 ]
 
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
 
 ROOT_URLCONF = 'steinerschool.urls'
@@ -180,8 +184,22 @@ STATICFILES_FINDERS = [
 
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = passwords.get('email_backend', 'backend', 'django.core.mail.backends.smtp.EmailBackend')
 ########## END EMAIL CONFIGURATION
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    # custom plugins
+    'plugins': "table,spellchecker,paste,searchreplace",
+    # editor theme
+    'theme': "advanced",
+    # custom CSS file for styling editor area
+    #'content_css': MEDIA_URL + "css/custom_tinymce.css",
+    # use absolute urls when inserting links/images
+    'relative_urls': False,
+}
+TINYMCE_COMPRESSOR = True
+
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INTERNAL_IPS = ('127.0.0.1',)

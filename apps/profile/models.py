@@ -7,22 +7,11 @@ import hashlib
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
-
 from django.utils.text import capfirst
 
-class ClassRoom(models.Model):
-	klascode = models.CharField(max_length=10, unique=True)
-	klasnaam = models.CharField(max_length=20)
-	slug = models.SlugField()
+from classrooms.models import ClassRoom
 
-	def __str__(self):
-		try:
-			return "%s" % (self.klasnaam)
-		except Exception, e:
-			return ""
-			
-	def __unicode__(self):
-		return "%s" % (self.klasnaam)
+
 
 class ProfileManager(models.Manager):
 	#custom manager
