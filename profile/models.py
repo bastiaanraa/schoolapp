@@ -42,8 +42,8 @@ class Profile(AbstractUser):
 	gescheiden = models.BooleanField(default=False)
 	
 	klas = models.ForeignKey(ClassRoom, on_delete=models.PROTECT, null=True, blank=True)
-	klas_ouder = models.ManyToManyField('ClassRoom', blank=True, related_name='klasouders')
-	klasleerkracht = models.ManyToManyField('ClassRoom', blank=True, related_name='leerkracht')
+	klas_ouder = models.ManyToManyField(ClassRoom, blank=True, related_name='klasouders')
+	klasleerkracht = models.ManyToManyField(ClassRoom, blank=True, related_name='leerkracht')
 
 	objects = UserManager()
 	has_email = ProfileManager()

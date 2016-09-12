@@ -61,10 +61,9 @@ INSTALLED_APPS = [
     'import_export',
     'debug_toolbar',
 
-    'apps.apps.MyAppConfig',
     'classrooms.apps.ClassRoomsConfig',
-    'apps.profile',
-    'apps.content',
+    'profile.apps.ProfileConfig',
+    'content.apps.ContentConfig',
 
 ]
 

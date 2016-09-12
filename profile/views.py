@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.profile.models import Profile
+from profile.models import Profile
 
 
 class ProfileDetail(LoginRequiredMixin, DetailView):

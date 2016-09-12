@@ -18,7 +18,8 @@ from django.utils import encoding
 from import_export import resources, fields, widgets
 from import_export.admin import ImportMixin
 
-from apps.profile.models import Profile, ClassRoom
+from profile.models import Profile
+from classrooms.models import ClassRoom
 
 import logging
 logger = logging.getLogger("schoolapp")
@@ -334,23 +335,9 @@ Medewerker Administratie R. Steinerschool
 	send_password_all.short_description = "Verstuur wachtwoord naar ALLE gebruikers"
 
 
-class StudentInline(admin.TabularInline):
-	model = Profile
 
-	fieldsets = (
-		(None, {'fields': ('first_name', 'last_name', 'parents')}),
-		)
-	readonly_fields = ('first_name', 'last_name', 'parents')
-
-
-class ClassroomAdmin(admin.ModelAdmin):
-	inlines = [StudentInline]
-	prepopulated_fields = {"slug": ("klasnaam",)}
-	#readonly_fields = ("slug",)
 
 
 # Re-register UserAdmin
 admin.site.unregister(Group)
 admin.site.register(Profile, UserAdmin)
-
-admin.site.register(ClassRoom, ClassroomAdmin)

@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from classrooms.models import ClassRoom
-from apps.profile.models import Profile
+from profile.models import Profile
 
 
 class ClassRoomDetail(LoginRequiredMixin, DetailView):
