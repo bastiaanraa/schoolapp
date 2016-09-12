@@ -35,7 +35,7 @@ passwords.read(PASSWORD_FILE)
 SECRET_KEY = 'b_%p_igepc@8_(5%j3vlwg@(pe+r!*!w7#_n5%ftt$3su_t=b@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = passwords.get('debug', 'debug', False)
 
 ALLOWED_HOSTS = []
 
