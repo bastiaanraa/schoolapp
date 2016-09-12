@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block sidebar-menu %}
+
+
+{% endblock %}
+
+{% block content %}
+    <h1>{{ object }}{% if object.klas %} <a href="{% url 'klas' object.klas %}">klas {{ object.klas }}</a>{% endif %}</h1>
+    {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
+    <p>{% if object.adres %}{{ object.adres }}<br />
+    {{ object.postcode }} {{ object.get_gemeente }}<br />{% endif %}
+    {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+    {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+    {% if object.email %}{{ object.email }}{% endif %}</p>
+    {% if object.is_ouder %}
+        <h2>Kind(eren):</h2>
+        <ul class='list-unstyled'>
+        {% for child in children %}
+            <li>{{ child }}&nbsp;&nbsp;<a href="{% url 'klas' child.klas %}"><i>Klas {{ child.klas }}</i></a></li>
+        {% endfor %}
+        {% if partner %}
+            <h2>Partner:</h2>
+            <a href="{% url 'profile' partner.pk %}">{{ partner }}</a>
+        {% endif %}
+    {% endif %}
+    {% if object.is_leerling %}
+        <h2>Ouder(s):</h2>
+        <ul class='list-unstyled'>
+        {% for parent in object.parents.all %}
+            <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>
+        {% endfor %}
+        {% if siblings %}
+            <h2>Broers en zussen:</h2>
+            {% for sibling in siblings %}
+                <li>{{ sibling }} <a href="{% url 'klas' sibling.klas %}"><i>klas {{ sibling.klas }}</i></a></li>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    
+        
+{% endblock %}
