@@ -197,7 +197,7 @@ TINYMCE_DEFAULT_CONFIG = {
     # use absolute urls when inserting links/images
     'relative_urls': False,
 }
-TINYMCE_COMPRESSOR = True
+#TINYMCE_COMPRESSOR = True
 
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False

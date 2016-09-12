@@ -20,8 +20,7 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 
 class MyClassRoom(LoginRequiredMixin, DetailView):
 	model = ClassRoom
-	template_name = "profile/classroom_detail.html"
-
+	
 	myKlas = None
 
 	def dispatch(self, request, *args, **kwargs):
