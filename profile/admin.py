@@ -28,7 +28,7 @@ logger = logging.getLogger("schoolapp")
 class ProfileResource(resources.ModelResource):
 	student_exists = False
 	# rename regular attributes
-	username = fields.Field(attribute='username')
+	username = fields.Field(attribute='username', column_name="Rijksregisternr.")
 	first_name = fields.Field(attribute='first_name', column_name='Voornaam')
 	last_name = fields.Field(attribute='last_name', column_name='Naam')
 	nickname = fields.Field(attribute='nickname', column_name='Nickname')
@@ -72,8 +72,11 @@ class ProfileResource(resources.ModelResource):
 		#return user.first_name.encode('utf-8')
 
 	def dehydrate_username(self, profile):
+		if profile.username:
+			return profile.username
+		return profile.first_name
 		# DIT DOET NIETS?
-		return profile.first_name+profile.last_name
+		#return profile.first_name+profile.last_name
 
 	def dehydrate_gescheiden(self, profile):
 		if profile.aanspreektitel == "Aan":
@@ -105,7 +108,7 @@ class ProfileResource(resources.ModelResource):
 	def before_save_instance(self, instance, dry_run):
 		print 'before_save'
 		#instance.first_name = instance.first_name.encode('utf-8')
-		instance.username = instance.first_name+instance.last_name
+		#instance.username = instance.first_name+instance.last_name
 		instance.is_leerling = True
 		if instance.aanspreektitel == "Aan":
 			instance.gescheiden = True
@@ -124,15 +127,15 @@ class ProfileResource(resources.ModelResource):
 				voornaam = ''
 				naam = ''
 				gsm = ''
-				print instance.aanpspreeknaam
+				#print instance.aanpspreeknaam
 				if instance.aanpspreeknaam == instance.parent1_naam+' '+instance.parent1_voornaam:
-					print 'Parent 1'
+					#print 'Parent 1'
 					email = instance.parent1_email
 					voornaam = instance.parent1_voornaam
 					naam = instance.parent1_naam
 					gsm = instance.parent1_gsm	
 				elif instance.aanpspreeknaam == instance.parent2_naam+' '+instance.parent2_voornaam:
-					print 'Parent 2'
+					#print 'Parent 2'
 					email = instance.parent2_email
 					voornaam = instance.parent2_voornaam
 					naam = instance.parent2_naam
@@ -212,7 +215,7 @@ class ProfileResource(resources.ModelResource):
 						if username == '':
 							username = instance.parent2_voornaam+instance.parent2_naam
 						try:
-							print username
+							#print username
 							parent2 = Profile(
 								username=username,
 								first_name=instance.parent2_voornaam,
