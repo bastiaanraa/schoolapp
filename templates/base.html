@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Cuprum' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static "css/steinerschool.css" %}">
     <link rel="stylesheet" href="{% static "css/bootstrap-overrides.css" %}">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
@@ -33,17 +34,23 @@
         </button>
     <div class="container collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul id="menu-header-menu" class="menu">
-        <li class="menu-item"><a href="{% url 'mijn-klassen' %}">LEERLINGEN KLAS</a></li>
+        <li class="menu-item"><a href="/">HOME</a></li>
         <li class="menu-item"><a href="{% url 'search' %}">ZOEK IN SCHOOLGIDS</a></li>
         <li class="menu-item"><a href="{% url 'klassen' %}">OVERZICHT KLASSEN</a></li>
-        <li class="menu-item"><a href="/klas">BESTUUR</a></li>
-        <li class="menu-item"><a href="/klas">WERKGROEPEN</a></li>
-        <li class="menu-item"><a href="/klas">INFORMATIE</a></li>
+        <li class="menu-item"><a href="{% url 'mijn-klassen' %}">SCHOOLGIDS</a></li>
+        <li class="menu-item"><a href="/bestuur">BESTUUR</a></li>
+        <li class="menu-item"><a href="/werkgroepen">WERKGROEPEN</a></li>
+        <li class="menu-item"><a href="/informatie">INFORMATIE</a></li>
       </ul>
     </div>
   </nav>
 
-  <div id="content" class="container"> 
+  <div id="content" class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <span style="float:right">aangemeld als <i>{{ user }}</i></span>
+      </div>
+    </div>
     <div class="row">
       
       <div class="col-sm-3 col-md-2 sidebar">
