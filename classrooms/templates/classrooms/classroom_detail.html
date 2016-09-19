@@ -11,8 +11,14 @@
 {% block content %}
 {% if object %}
     <h2>Klas {{ object }}</h2>
-    <p>Leerkracht: {% for leerkracht in object.leerkracht.all %}{{leerkracht}}{%endfor%}</p>
-    <p>Klasouder(s): {% for klasouder in object.klasouders.all %}{{klasouder}}{% endfor %}</p>
+    <p>Leerkracht: {% for leerkracht in object.leerkracht.all %}
+            {% if not forloop.first %} & {%endif%}
+            <a href="{% url 'profile' leerkracht.pk %}">{{leerkracht}}</a>
+        {%endfor%}</p>
+    <p>Klasouder(s): {% for klasouder in object.klasouders.all %}
+            {% if not forloop.first %} & {%endif%}
+            <a href="{% url 'profile' klasouder.pk %}">{{klasouder}}</a>
+        {% endfor %}</p>
     <p>Aantal: {{ students|length }}</p>
     <table>
         <tbody>
