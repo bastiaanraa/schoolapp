@@ -283,7 +283,6 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 
 	def send_password_mail(self, user,request):
 		from django.core.mail import send_mail
-		from django.template import Context, Template
 		from django.template.loader import get_template
 		# WAT ALS GEBRUIKS HUN EMAIL AANGEPAST HEBBEN???
 		

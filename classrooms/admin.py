@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 from classrooms.models import ClassRoom
-from classrooms.forms import ClassRoomForm
 from profile.models import Profile
 
 class StudentInline(admin.TabularInline):
