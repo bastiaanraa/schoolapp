@@ -281,32 +281,33 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				request._set_post(post)
 		return super(UserAdmin, self).changelist_view(request, extra_context)
 
-	def send_password_mail(self, user):
+	def send_password_mail(self, user,request):
 		from django.core.mail import send_mail
+		from django.template import Context, Template
+		from django.template.loader import get_template
 		# WAT ALS GEBRUIKS HUN EMAIL AANGEPAST HEBBEN???
+		
+		
+		template_text = get_template('send_password.txt')
+		template_html = get_template('send_password.html')
+		
 
+		text_content = template_text.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
+		html_content = template_html.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
+		
 		send_mail(
 			'Login gegevens voor steinerschoolgent.be', 
-			"""Beste """+ user.first_name+""",\n
-Dit zijn uw login gegevens voor het afgeschermde gedeelte van https://intern.steinerschoolgent.be: 
-\n
-gebruikersnaam: """+user.email+"""
-wachtwoord: """+user.make_pw_hash(user.username)+"""\n
-\n
-Met beste groeten en veel surfplezier!
-
-Margot Rondel
-Medewerker Administratie R. Steinerschool
-""", 
-			'website@steinerschoolgent.be',
-			[user.email], 
+			text_content, 
+			'website@intern.steinerschoolgent.be',
+			[user.email],
+			html_message = html_content,
 			fail_silently=False)
 
 	def send_password_selected(self, request, queryset):
 		if request.POST.get('post'):
 			for i in queryset:
 				if i.email:
-					self.send_password_mail(i)
+					self.send_password_mail(i, request)
 			self.message_user(request, "Mail sent successfully ")
 		else:
 			context = {
