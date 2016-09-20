@@ -182,6 +182,11 @@ STATICFILES_FINDERS = [
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = passwords.get('email_backend', 'backend', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = passwords.get('email_backend', 'host')
+EMAIL_PORT = 465
+EMAIL_HOST_USER = passwords.get('email_backend', 'username')
+EMAIL_HOST_PASSWORD = passwords.get('email_backend', 'password')
+EMAIL_USE_SSL = True
 ########## END EMAIL CONFIGURATION
 
 
