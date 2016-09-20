@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% load cache %}
+
 
 {% block sidebar-menu %}
+{% cache 3600 sidebar %}
     {% for klas in klassen %}
         <li {% if object == klas %} class="active" {% endif %}>
             <a href="{% url 'klas' klas %}">Klas {{klas}}</a>
         </li>
     {% endfor %}
+{% endcache %}
 {% endblock %}
 
 {% block content %}
+{% cache 3600 klas klas.pk %}
 {% if object %}
     <h2>Klas {{ object }}</h2>
     <p>Leerkracht: {% for leerkracht in object.leerkracht.all %}
@@ -58,5 +63,6 @@
     </table>
 {% else %}
 <h2>Geen klassen gevonden</h2>
-{% endif %}      
+{% endif %}    
+{% endcache %}  
 {% endblock %}
