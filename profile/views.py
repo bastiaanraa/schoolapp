@@ -21,7 +21,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 				context['partner'] = Profile.objects.filter( \
 				adres=self.object.adres, \
 				postcode=self.object.postcode,
-				is_ouder=True
+				is_ouder=True, overleden=False
 				).exclude(pk=self.object.pk)[0]
 			except Exception, e:
 				pass
@@ -65,5 +65,5 @@ class Search(LoginRequiredMixin, ListView):
 					   (Q(username__icontains=q) for q in query_list))
 			)
 
-		return result.filter(is_superuser=False)
+		return result.filter(is_superuser=False, overleden=False)
 

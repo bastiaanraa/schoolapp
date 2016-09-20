@@ -28,17 +28,22 @@
                     {% for parent in student.parents.all %}
                     <tr class="{{ rowcolors }}">
                         <td>{% if forloop.first %}{{ student }}{% endif %}</td>
-                        <td><a href="{% url 'profile' parent.pk %}"/>{{ parent }}</a></td>
+                        <td>{% if parent.overleden %}
+                                {{ parent|safe }}
+                            {% else %}
+                                <a href="{% url 'profile' parent.pk %}"/>{{ parent|safe }}</a>
+                            {% endif %}
+                        </td>
                         <td>{{ parent.gsm }}</td>
                         <td>{{ parent.email }}</td>
                         <td>
                             {% ifchanged %}
-                                {{ parent.adres }}
+                                {{ parent.get_address }}
                             {% endifchanged %}
                         </td>
                         <td>
                             {% ifchanged %}
-                                {{ parent.postcode }} {{ parent.get_gemeente|lower|capfirst }}
+                                {{ parent.get_postcode }} {{ parent.get_gemeente|lower|capfirst }}
                             {% endifchanged %}
                         </td>
                         <td>

@@ -51,7 +51,9 @@ class ProfileResource(resources.ModelResource):
 	parent1_gsm = fields.Field(attribute="parent1_gsm", column_name="GSM Vader")
 	parent2_gsm = fields.Field(attribute="parent2_gsm", column_name="GSM Moeder")
 	telefoon = fields.Field(attribute="telefoon", column_name="Domicilie-telefoon")
-	 
+	opmerking = fields.Field(attribute="opmerking", column_name="Opmerking leerling")
+	parent1_overleden = fields.Field(attribute="parent1_overleden", column_name="Vader overleden")
+	parent2_overleden = fields.Field(attribute="parent2_overleden", column_name="Moeder overleden")
 	#parent_gescheiden = fields.Field(attribute='parent_name', column_name='Aanspreeknaam (Aanschrijf)')
 	
 	klas = fields.Field(attribute="klas", column_name="Klascode", widget=widgets.ForeignKeyWidget(ClassRoom, 'klascode'))
@@ -133,13 +135,25 @@ class ProfileResource(resources.ModelResource):
 					email = instance.parent1_email
 					voornaam = instance.parent1_voornaam
 					naam = instance.parent1_naam
-					gsm = instance.parent1_gsm	
+					gsm = instance.parent1_gsm
+					overleden=False
+					if instance.parent1_overleden == "overleden":
+						overleden=True
+					hide_address =False
+					if 'adres:NietBeschikbaar(vader)' in instance.opmerking:
+						hide_address = True
 				elif instance.aanpspreeknaam == instance.parent2_naam+' '+instance.parent2_voornaam:
 					#print 'Parent 2'
 					email = instance.parent2_email
 					voornaam = instance.parent2_voornaam
 					naam = instance.parent2_naam
 					gsm = instance.parent2_gsm
+					overleden=False
+					if instance.parent2_overleden == "overleden":
+						overleden=True
+					hide_address =False
+					if 'adres:NietBeschikbaar(moeder)' in instance.opmerking:
+						hide_address = True
 				
 				username = email
 				if username == '':
@@ -149,7 +163,7 @@ class ProfileResource(resources.ModelResource):
 
 				try:
 					with transaction.atomic():
-						parent = Profile(username=username,
+						parent = Profile(username=username.replace(" ", ""),
 								first_name=voornaam,
 								last_name=naam,
 								is_ouder=True,
@@ -159,6 +173,8 @@ class ProfileResource(resources.ModelResource):
 								email = email,
 								gsm = gsm,
 								telefoon= instance.telefoon,
+								overleden=overleden,
+								hide_address=hide_address
 								)
 						parent.save()
 				except IntegrityError, e:
@@ -174,17 +190,24 @@ class ProfileResource(resources.ModelResource):
 					raise e
 			else:
 				try:
-					
-					#is er een ouder1?
+					hide_address =False
+					if 'adres:NietBeschikbaar' in instance.opmerking:
+						hide_address = True
+
+					#is er een parent1 = vader?
 					if not instance.parent1_naam == '':
 						#heeft email?
 						username = instance.parent1_email
 						if username == '':
 							username = instance.parent1_voornaam+instance.parent1_naam
 
+						overleden=False
+						if instance.parent1_overleden == "overleden":
+							overleden=True
+						
 						try:
 							parent1 = Profile(
-								username=username,
+								username=username.replace(" ", ""),
 								first_name=instance.parent1_voornaam,
 								last_name=instance.parent1_naam,
 								is_ouder=True,
@@ -193,7 +216,9 @@ class ProfileResource(resources.ModelResource):
 								postcode=instance.postcode,
 								email = instance.parent1_email,
 								gsm = instance.parent1_gsm,
-								telefoon=instance.telefoon
+								telefoon=instance.telefoon,
+								overleden=overleden,
+								hide_address=hide_address
 								)
 							with transaction.atomic():
 								parent1.save()
@@ -214,10 +239,14 @@ class ProfileResource(resources.ModelResource):
 						username = instance.parent2_email
 						if username == '':
 							username = instance.parent2_voornaam+instance.parent2_naam
+						
+						overleden=False
+						if instance.parent2_overleden == "overleden":
+							overleden=True
 						try:
 							#print username
 							parent2 = Profile(
-								username=username,
+								username=username.replace(" ", ""),
 								first_name=instance.parent2_voornaam,
 								last_name=instance.parent2_naam,
 								is_ouder=True,
@@ -227,6 +256,8 @@ class ProfileResource(resources.ModelResource):
 								email = instance.parent2_email,
 								gsm = instance.parent2_gsm,
 								telefoon = instance.telefoon,
+								overleden=overleden,
+								hide_address=hide_address
 								)
 							with transaction.atomic():
 								parent2.save()
@@ -254,7 +285,8 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	fieldsets = (
 		(None, {'fields': ('username','first_name', 'last_name','email', 'password')}),
 		('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
-		('Personal info', {'fields': ('geboortedatum','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
+		('Personal info', {'fields': ('geboortedatum', 'overleden','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
+		('Privacy', {'fields': ('hide_address', 'hide_email', 'hide_phone')}),
 		('Gezin', {'fields': ('gescheiden','parents',)}),
 		('Klas', {'fields': ('klas',)}),
 		('Klasouder', {'fields': ('klas_ouder',)}),

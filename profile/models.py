@@ -40,7 +40,15 @@ class Profile(AbstractUser):
 	is_medewerker = models.BooleanField(default=False)
 	parents = models.ManyToManyField("self", blank=True)
 	gescheiden = models.BooleanField(default=False)
-	
+	overleden = models.BooleanField(default=False)
+	opmerking = models.CharField("Opmerking leerling", max_length=255, blank=True)
+
+	# privacy
+	hide_address = models.BooleanField(default=False)
+	hide_email = models.BooleanField(default=False)
+	hide_phone = models.BooleanField(default=False)
+
+	# relations
 	klas = models.ForeignKey(ClassRoom, on_delete=models.PROTECT, null=True, blank=True)
 	klas_ouder = models.ManyToManyField(ClassRoom, blank=True, related_name='klasouders')
 	klasleerkracht = models.ManyToManyField(ClassRoom, blank=True, related_name='leerkracht')
@@ -50,16 +58,57 @@ class Profile(AbstractUser):
 	
 	def __str__(self):
 		try:
+			if self.overleden:
+				return "&dagger; %s %s" % (self.first_name, self.last_name)
 			return "%s %s" % (self.first_name, self.last_name)
 		except Exception, e:
 			return ""
 			
 	def __unicode__(self):
+		if self.overleden:
+			return "&dagger; %s %s" % (self.first_name, self.last_name)
 		return "%s %s" % (self.first_name, self.last_name)
 
+	def get_address(self):
+		if self.hide_address:
+			return ""
+		try:
+			if self.get_partner().hide_address:
+				return ""
+		except Exception, e:
+			pass
+		return self.adres
+
+	def get_postcode(self):
+		if self.hide_address:
+			return ""
+		try:
+			if self.get_partner().hide_address:
+				return ""
+		except Exception, e:
+			pass
+		return self.postcode
+	
 	def get_gemeente(self):
+		if self.hide_address:
+			return ""
+		try:
+			if self.get_partner().hide_address:
+				return ""
+		except Exception, e:
+			pass
 		return capfirst(self.gemeente.split(' ')[0].lower())
 
+	def get_partner(self):
+		try:
+			return Profile.objects.filter( \
+				adres=self.adres, \
+				postcode=self.postcode,
+				is_ouder=True, overleden=False
+				).exclude(pk=self.pk)[0]
+		except Exception, e:
+			return None
+		
 	
 	def make_pw_hash(self, user_name):
 		#Function to create hashed password
@@ -73,6 +122,10 @@ class Profile(AbstractUser):
 			if not self.is_superuser:
 				self.set_password(self.make_pw_hash(self.username))
 		super(Profile, self).save(*args, **kwargs)
+
+	class Meta:
+		ordering= ['overleden', 'first_name',]
+
 
 from csvImporter.model import CsvModel
 from csvImporter import fields

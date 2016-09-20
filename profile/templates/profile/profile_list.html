@@ -20,13 +20,26 @@
     <a href="{% url 'profile' object.pk %}">{{ object }}</a>
     {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
     {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
-    {% if object.adres %}{{ object.adres }}<br />
-    {{ object.postcode }} {{ object.get_gemeente }}<br />{% endif %}
-    {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
-    {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
-    {% if object.email %}{{ object.email }}<br />{% endif %}
-    {% for child in object.parents.all %}
-      <a href="{% url 'profile' child.pk %}">{{ child }}</a> {% if child.klas %}(<a href="{% url 'klas' child.klas %}"><i>klas {{child.klas}}</i></a>){% endif %}&nbsp;{% endfor %}
+    {% if object.is_leerkracht %}<i>leerkracht</i></br>{% endif %}
+    {% if not object.is_leerling %}
+      {% if object.adres %}{{ object.get_address }}<br />
+      {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
+      {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+      {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+      {% if object.email %}{{ object.email }}<br />{% endif %}
+    {% endif %}
+
+    {% if object.is_leerling %}ouder(s): {% endif %}
+    {% for user in object.parents.all %}
+      {% if user.overleden %}
+        {{ user|safe }}
+      {% else %}
+        <a href="{% url 'profile' user.pk %}">{{ user|safe }}</a> 
+          {% if user.klas %}
+            (<a href="{% url 'klas' user.klas %}"><i>klas {{user.klas}}</i></a>)
+          {% endif %}&nbsp;
+      {% endif %}
+    {% endfor %}
     <hr>
   </div>
 {% empty %}
