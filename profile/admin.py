@@ -26,7 +26,6 @@ logger = logging.getLogger("schoolapp")
 
 			
 class ProfileResource(resources.ModelResource):
-	student_exists = False
 	# rename regular attributes
 	username = fields.Field(attribute='username', column_name="Rijksregisternr.")
 	first_name = fields.Field(attribute='first_name', column_name='Voornaam')
@@ -62,21 +61,19 @@ class ProfileResource(resources.ModelResource):
 	class Meta:
 		model = Profile
 		import_id_fields = ('nickname',) #rijksregister!!
-		fields = ('nickname','last_name','first_name', 'username', 'geboortedatum', \
+		fields = ('username', 'nickname','last_name','first_name', 'username', 'geboortedatum', \
 			'postcode', 'gescheiden', 'klas', 'telefoon', )
 		skip_unchanged = True
 		report_skipped = True
 
 
-	def dehydrate_first_name(self, user):
-		#print user
-		return user.first_name
-		#return user.first_name.encode('utf-8')
-
 	def dehydrate_username(self, profile):
 		if profile.username:
 			return profile.username
-		return profile.first_name
+		else:
+			print 'username'
+			print profile.__dict__
+			return profile.nickname
 		# DIT DOET NIETS?
 		#return profile.first_name+profile.last_name
 
@@ -93,7 +90,6 @@ class ProfileResource(resources.ModelResource):
 		"""
 		self.before_save_instance(instance, dry_run)
 		if not dry_run:
-			self.student_exists = False
 			try:
 				with transaction.atomic():
 					instance.save()
@@ -101,45 +97,51 @@ class ProfileResource(resources.ModelResource):
 				#IntegrityError: (1062, "Duplicate entry 'zzz' for key 'username'")
 				print "save instance: integrity error"
 				print(e)
-				self.student_exists = True
 			except Exception, e:
 				print "nog een andere fout"
 				print e
 		self.after_save_instance(instance, dry_run)
 
 	def before_save_instance(self, instance, dry_run):
-		print 'before_save'
-		#instance.first_name = instance.first_name.encode('utf-8')
-		#instance.username = instance.first_name+instance.last_name
 		instance.is_leerling = True
 		if instance.aanspreektitel == "Aan":
 			instance.gescheiden = True
 		
 
 	def after_save_instance(self, instance, dry_run):
-		print 'after_save'
+		#print 'after_save'
+		#print instance.aanpspreeknaam
 		# om te weten met welke parent we te maken hebben
 		
 		
 		if dry_run == False:
-			child = Profile.objects.get(username=instance.username)
+			overleden=False
+			hide_address =False
+
+			try:
+				child = Profile.objects.get(username=instance.username)
+			except:
+				print "except 0"
+				#print e
 			
 			if instance.gescheiden:
 				email = ''
 				voornaam = ''
 				naam = ''
 				gsm = ''
-				#print instance.aanpspreeknaam
+				
+
+				
 				if instance.aanpspreeknaam == instance.parent1_naam+' '+instance.parent1_voornaam:
 					#print 'Parent 1'
 					email = instance.parent1_email
 					voornaam = instance.parent1_voornaam
 					naam = instance.parent1_naam
 					gsm = instance.parent1_gsm
-					overleden=False
+					
 					if instance.parent1_overleden == "overleden":
 						overleden=True
-					hide_address =False
+					
 					if 'adres:NietBeschikbaar(vader)' in instance.opmerking:
 						hide_address = True
 				elif instance.aanpspreeknaam == instance.parent2_naam+' '+instance.parent2_voornaam:
@@ -148,10 +150,10 @@ class ProfileResource(resources.ModelResource):
 					voornaam = instance.parent2_voornaam
 					naam = instance.parent2_naam
 					gsm = instance.parent2_gsm
-					overleden=False
+					
 					if instance.parent2_overleden == "overleden":
 						overleden=True
-					hide_address =False
+					
 					if 'adres:NietBeschikbaar(moeder)' in instance.opmerking:
 						hide_address = True
 				
@@ -179,18 +181,21 @@ class ProfileResource(resources.ModelResource):
 						parent.save()
 				except IntegrityError, e:
 					parent = Profile.objects.get(username=username) #?
+					parent.hide_address = hide_address
+					parent.is_active = True
+					parent.save()
 				except Exception, e:
 					print "except A"
-					raise e
+					print e
 				
 				try:
 					child.parents.add(parent)
 				except Exception, e:
 					print "except B"
-					raise e
+					print e
 			else:
 				try:
-					hide_address =False
+					
 					if 'adres:NietBeschikbaar' in instance.opmerking:
 						hide_address = True
 
@@ -224,6 +229,9 @@ class ProfileResource(resources.ModelResource):
 								parent1.save()
 						except IntegrityError, e:
 							parent1 = Profile.objects.get(username=username)
+							parent1.hide_address = hide_address
+							parent1.is_active = True
+							parent1.save()
 						except Exception, e:
 							print e
 						
@@ -231,7 +239,8 @@ class ProfileResource(resources.ModelResource):
 							with transaction.atomic():
 								child.parents.add(parent1)
 						except Exception, e:
-							raise e
+							print 'Except AA'
+							print e
 						
 					
 					#is er een ouder2
@@ -263,14 +272,19 @@ class ProfileResource(resources.ModelResource):
 								parent2.save()
 						except IntegrityError, e:
 							parent2 = Profile.objects.get(username=username)
+							parent2.hide_address = hide_address
+							parent2.is_active = True
+							parent2.save()
 						except Exception, e:
+							print 'Except BB'
 							print e
 						
 						try:
 							with transaction.atomic():
 								child.parents.add(parent2)
 						except Exception, e:
-							raise e
+							print 'except BBB'
+							print e
 				except Exception, e:
 					print "except C"
 					print e
