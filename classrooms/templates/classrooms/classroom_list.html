@@ -7,7 +7,7 @@
         <tr>
             <th></th>
             <th>Leerkracht</th>
-            <th>Klasouder</th>
+            <th colspan="3">Klasouder</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +21,9 @@
                 </td>
                 <td>
                     {% for klasouder in object.klasouders.all %}
-                        <a href="{% url 'profile' klasouder.pk %}">{{ klasouder }}</a> {{klasouder.gsm}} {{klasouder.email}}{% if not forloop.last %}<br />{% endif %}
+                        <a href="{% url 'profile' klasouder.pk %}">{{ klasouder }}</a>
+                        <td>{{klasouder.gsm}}</td>
+                        <td>{{klasouder.email}}</td>
                     {% endfor %}
                 </td>
             </tr>
