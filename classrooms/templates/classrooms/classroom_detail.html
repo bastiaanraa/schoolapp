@@ -3,33 +3,47 @@
 
 
 {% block sidebar-menu %}
-
+{% cache 10 sidebar object.pk %}
     {% for klas in klassen %}
         <li {% if object == klas %} class="active" {% endif %}>
             <a href="{% url 'klas' klas %}">Klas {{klas}}</a>
         </li>
     {% endfor %}
-
+{% endcache %}
 {% endblock %}
 
 {% block content %}
 
 {% if object %}
+{% cache 100 classroom object.pk %}
     <h2>Klas {{ object }}</h2>
-    <p>Leerkracht: {% for leerkracht in object.leerkracht.all %}
+    <div>
+        <p style="float:left;">
+            Klasleerkracht: {% for leerkracht in object.leerkracht.all %}
             {% if not forloop.first %} & {%endif%}
             <a href="{% url 'profile' leerkracht.pk %}">{{leerkracht}}</a>
-        {%endfor%}</p>
-    <p>Klasouder(s): {% for klasouder in object.klasouders.all %}
+            {%endfor%}
+            <br />
+            Klasouder(s): {% for klasouder in object.klasouders.all %}
             {% if not forloop.first %} & {%endif%}
             <a href="{% url 'profile' klasouder.pk %}">{{klasouder}}</a>
-        {% endfor %}</p>
-    <p>Aantal: {{ students|length }}</p>
+            {% endfor %}
+            <br />
+            Aantal leerlingen: {{ students|length }}
+        </p>
+        <p style="float:right;margin-right:10px;">
+            {% if request.user.is_klasouder or request.user.is_medewerker or request.user.is_staff  or request.user.is_superuser %}
+            <i class="fa fa-long-arrow-right" aria-hidden="true"></i> <a href="mailto:?BCC= {{all_email}}">
+            Verstuur e-mail naar alle ouders + klasleerkracht</a>
+            {% endif %}
+        </p>
+    </div>
+    <div style="clear:both;"></div>
     <table>
         <tbody>
             
             {% for student in students %}
-                <span style="display:none">{% cycle 'even' 'odd' as rowcolors %}</span>
+                <div style="display:none">{% cycle 'even' 'odd' as rowcolors %}</div>
                     {% for parent in student.parents.all %}
                     <tr class="{{ rowcolors }}">
                         <td>{% if forloop.first %}{{ student }}{% endif %}</td>
@@ -61,8 +75,8 @@
             {% endfor %}
         </tbody>
     </table>
+{% endcache %}
 {% else %}
 <h2>Geen klassen gevonden</h2>
 {% endif %}    
-
 {% endblock %}

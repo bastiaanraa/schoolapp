@@ -12,9 +12,12 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ClassRoomDetail, self).get_context_data(**kwargs)
 		
-		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).order_by('first_name')
+		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).prefetch_related("parents").order_by('first_name')
 		#print self.object.klas_set.all() DIT MOET TOCH WERKEN???
-		
+		context['all_email'] = ''
+		for student in context['students']:
+			for parent in student.parents.all():
+				context['all_email'] += parent.email+";"
 		context['klassen'] = ClassRoom.objects.all() #hier een context variabele van maken context_processor?
 		return context
 

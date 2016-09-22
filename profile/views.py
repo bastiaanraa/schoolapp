@@ -14,7 +14,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ProfileDetail, self).get_context_data(**kwargs)
 		if self.object.is_ouder:	
-			context['children'] = Profile.objects.filter(is_leerling=True, parents=self.object)
+			context['children'] = Profile.objects.filter(is_leerling=True, parents=self.object).prefetch_related("parents")
 		
 			# zelfde adres voor partner
 			try:

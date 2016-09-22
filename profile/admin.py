@@ -71,8 +71,6 @@ class ProfileResource(resources.ModelResource):
 		if profile.username:
 			return profile.username
 		else:
-			print 'username'
-			print profile.__dict__
 			return profile.nickname
 		# DIT DOET NIETS?
 		#return profile.first_name+profile.last_name
@@ -103,6 +101,8 @@ class ProfileResource(resources.ModelResource):
 		self.after_save_instance(instance, dry_run)
 
 	def before_save_instance(self, instance, dry_run):
+		# INVALIDE CACHE ! en cache hoger zetten
+		
 		instance.is_leerling = True
 		if instance.aanspreektitel == "Aan":
 			instance.gescheiden = True
@@ -160,12 +160,13 @@ class ProfileResource(resources.ModelResource):
 				username = email
 				if username == '':
 						username = instance.aanpspreeknaam
+						username = username.replace(" ", "")
 
 				# BETER: eerst kijken of ouder bestaat, dan ofwel update or create ?!
 
 				try:
 					with transaction.atomic():
-						parent = Profile(username=username.replace(" ", ""),
+						parent = Profile(username=username,
 								first_name=voornaam,
 								last_name=naam,
 								is_ouder=True,
@@ -205,6 +206,7 @@ class ProfileResource(resources.ModelResource):
 						username = instance.parent1_email
 						if username == '':
 							username = instance.parent1_voornaam+instance.parent1_naam
+							username = username.replace(" ", "")
 
 						overleden=False
 						if instance.parent1_overleden == "overleden":
@@ -212,7 +214,7 @@ class ProfileResource(resources.ModelResource):
 						
 						try:
 							parent1 = Profile(
-								username=username.replace(" ", ""),
+								username=username,
 								first_name=instance.parent1_voornaam,
 								last_name=instance.parent1_naam,
 								is_ouder=True,
@@ -248,6 +250,7 @@ class ProfileResource(resources.ModelResource):
 						username = instance.parent2_email
 						if username == '':
 							username = instance.parent2_voornaam+instance.parent2_naam
+							username = username.replace(" ", "")
 						
 						overleden=False
 						if instance.parent2_overleden == "overleden":
@@ -255,7 +258,7 @@ class ProfileResource(resources.ModelResource):
 						try:
 							#print username
 							parent2 = Profile(
-								username=username.replace(" ", ""),
+								username=username,
 								first_name=instance.parent2_voornaam,
 								last_name=instance.parent2_naam,
 								is_ouder=True,
@@ -286,6 +289,7 @@ class ProfileResource(resources.ModelResource):
 							print 'except BBB'
 							print e
 				except Exception, e:
+					print username
 					print "except C"
 					print e
 		
