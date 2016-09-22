@@ -33,7 +33,7 @@
                 </td>
                 <td>
                     {% for klasouder in object.klasouders.all %}
-                        {{klasouder.email}}
+                        <a href="mailtro:{{klasouder.email}}">{{klasouder.email}}</a>
                         <br>
                     {% endfor %}
                 </td>
