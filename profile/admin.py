@@ -343,7 +343,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		send_mail(
 			'Login gegevens voor steinerschoolgent.be', 
 			text_content, 
-			'website@intern.steinerschoolgent.be',
+			'website@steinerschoolgent.be',
 			[user.email],
 			html_message = html_content,
 			fail_silently=False)
