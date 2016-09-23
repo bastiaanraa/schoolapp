@@ -301,7 +301,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	list_filter = ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas']
 	fieldsets = (
-		(None, {'fields': ('username','first_name', 'last_name','email', 'password')}),
+		(None, {'fields': ('username','first_name', 'last_name', 'password')}),
 		('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
 		('Personal info', {'fields': ('geboortedatum', 'overleden','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
 		('Privacy', {'fields': ('hide_address', 'hide_email', 'hide_phone')}),
