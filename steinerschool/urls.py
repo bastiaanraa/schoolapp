@@ -10,6 +10,7 @@ from classrooms.views import ClassRooms, ClassRoomDetail, MyClassRoom
 
 urlpatterns = [
     #url(r"^$", MyClassRoom.as_view(), name="mijn-klassen"),
+    url(r'^$', ClassRooms.as_view(), name='klassen'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^mijn-klassen', MyClassRoom.as_view(), name="mijn-klassen"),

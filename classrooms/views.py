@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.flatpages.models import FlatPage
 
 from classrooms.models import ClassRoom
 from profile.models import Profile
@@ -55,11 +56,20 @@ class MyClassRoom(LoginRequiredMixin, DetailView):
 		return object
 
 class ClassRooms(LoginRequiredMixin, ListView):
+	
+
 	model = ClassRoom
 
-	"""
+	
 	def get_context_data(self, *args, **kwargs):
 		context = super(ClassRooms, self).get_context_data(*args, **kwargs)
+		
 		# add extra context
-		retrun context
-	"""
+		try:
+			context['tekst'] = FlatPage.objects.get(url='/') # get home page
+		except Exception, e:
+			raise e
+		
+		
+		return context
+	
