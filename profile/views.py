@@ -1,8 +1,9 @@
 import operator
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout as auth_logout
 
 from profile.models import Profile
 
@@ -66,4 +67,14 @@ class Search(LoginRequiredMixin, ListView):
 			)
 
 		return result.filter(is_superuser=False, overleden=False)
+
+class LogoutView(RedirectView):
+	"""
+	Provides users the ability to logout
+	"""
+	url = '/'
+
+	def get(self, request, *args, **kwargs):
+		auth_logout(request)
+		return super(LogoutView, self).get(request, *args, **kwargs)
 

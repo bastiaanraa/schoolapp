@@ -49,7 +49,7 @@
   <div id="content" class="container">
     <div class="row">
       <div class="col-xs-12">
-        <span style="float:right">{% if request.user.is_authenticated %}aangemeld als <i>{{ user }}{% endif %}</i></span>
+        <div style="float:right;">{% if request.user.is_authenticated %}<i>{{ user }}</i> | <a href="{% url 'logout' %}">Afmelden</a>{% endif %}</div>
       </div>
     </div>
     <div class="row">

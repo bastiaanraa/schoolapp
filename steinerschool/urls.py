@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from profile.views import ProfileDetail, Search
+from profile.views import ProfileDetail, Search, LogoutView
 from classrooms.views import ClassRooms, ClassRoomDetail, MyClassRoom
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^$', ClassRooms.as_view(), name='klassen'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^mijn-klassen', MyClassRoom.as_view(), name="mijn-klassen"),
     url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
     url(r'^klassen', ClassRooms.as_view(), name='klassen'),
