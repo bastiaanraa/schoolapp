@@ -309,7 +309,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		('Klas', {'fields': ('klas',)}),
 		('Klasouder', {'fields': ('klas_ouder',)}),
 		('Leerkracht', {'fields': ('klasleerkracht',)}),
-		('Permissions', {'fields': ('is_superuser',)}),
+		('Permissions', {'fields': ('is_staff',)}),
 	)
 	filter_horizontal = ('parents',)
 	actions = ['send_password_selected', 'send_password_all']
