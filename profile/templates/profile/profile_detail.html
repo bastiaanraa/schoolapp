@@ -8,11 +8,13 @@
 {% block content %}
     <h1>{{ object }}{% if object.klas %} <a href="{% url 'klas' object.klas %}">klas {{ object.klas }}</a>{% endif %}</h1>
     {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
-    <p>{% if object.adres %}{{ object.adres }}<br />
-    {{ object.postcode }} {{ object.get_gemeente }}<br />{% endif %}
-    {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
-    {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
-    {% if object.email %}{{ object.email }}{% endif %}</p>
+    <p>{% if not object.is_leerling %}
+        {% if object.adres %}{{ object.get_address }}<br />
+        {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
+        {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+        {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+        {% if object.email %}{{ object.email }}{% endif %}
+    {% endif %}</p>
     {% if object.is_ouder %}
         <h2>Kind(eren):</h2>
         <ul class='list-unstyled'>
