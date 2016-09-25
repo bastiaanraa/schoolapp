@@ -309,6 +309,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 		('Klas', {'fields': ('klas',)}),
 		('Klasouder', {'fields': ('klas_ouder',)}),
 		('Leerkracht', {'fields': ('klasleerkracht',)}),
+		('Werkgroep', {'fields': ('werkgroep',)}),
 		('Permissions', {'fields': ('is_staff',)}),
 	)
 	filter_horizontal = ('parents',)
