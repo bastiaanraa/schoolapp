@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% load i18n static %}
+
+{% block sidebar-menu %}
+	{% if '/werkgroepen/' in request.path %}
+    {% for werkgroep in werkgroepen %}
+        <li {% if object == werkgroep %} class="active" {% endif %}>
+            <a href="{% url 'werkgroep' werkgroep %}">{{werkgroep|title}}</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
+{{ request.path }}
 <div>
 {{flatpage.content|safe}}
 </div>
