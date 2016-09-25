@@ -10,6 +10,7 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.text import capfirst
 
 from classrooms.models import ClassRoom
+from werkgroepen.models import Werkgroep
 
 
 
@@ -52,6 +53,8 @@ class Profile(AbstractUser):
 	klas = models.ForeignKey(ClassRoom, on_delete=models.PROTECT, null=True, blank=True)
 	klas_ouder = models.ManyToManyField(ClassRoom, blank=True, related_name='klasouders')
 	klasleerkracht = models.ManyToManyField(ClassRoom, blank=True, related_name='leerkracht')
+
+	werkgroep = models.ManyToManyField(Werkgroep, blank=True, related_name='werkgroep')
 
 	objects = UserManager()
 	has_email = ProfileManager()
