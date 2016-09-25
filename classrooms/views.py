@@ -19,7 +19,7 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 		for student in context['students']:
 			for parent in student.parents.all():
 				context['all_email'] += parent.email+";"
-		context['klassen'] = ClassRoom.objects.all() #hier een context variabele van maken context_processor?
+		
 		return context
 
 class MyClassRoom(LoginRequiredMixin, DetailView):
@@ -37,7 +37,6 @@ class MyClassRoom(LoginRequiredMixin, DetailView):
 	def get_context_data(self, *args, **kwargs):
 		# Call the base implementation first to get a context
 		context = super(MyClassRoom, self).get_context_data(*args, **kwargs)
-		context['klassen'] = ClassRoom.objects.all()
 		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.myKlas).order_by('first_name')
 		context["klasouders"] = Profile.objects.filter(is_klasouder=True, klas_ouder=self.myKlas)
 		return context

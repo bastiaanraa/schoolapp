@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'classrooms.apps.ClassRoomsConfig',
     'profile.apps.ProfileConfig',
     'content.apps.ContentConfig',
+    'werkgroepen.apps.WerkgroepenConfig',
 
 ]
 
@@ -92,6 +93,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'steinerschool.context_processors.schoolapp_context',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
