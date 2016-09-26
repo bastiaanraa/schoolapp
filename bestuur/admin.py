@@ -24,6 +24,7 @@ class VerslagInline(admin.TabularInline):
 
 class BestuurAdmin(admin.ModelAdmin):
 	inlines = [VerslagInline, ProfileInline]
+	exclude = ('bestuur',)
 	form = BestuurForm
 	fields = ('naam', 'slug', 'tekst',)
 	prepopulated_fields = {'slug': ('naam',)}
