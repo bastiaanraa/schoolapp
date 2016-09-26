@@ -9,6 +9,7 @@ from profile.views import ProfileDetail, Search, LogoutView
 from classrooms.views import ClassRooms, ClassRoomDetail, MyClassRoom
 from werkgroepen.views import WerkgroepDetail
 from bestuur.views import BestuurDetail
+from informatie.views import InformatieDetail
 
 urlpatterns = [
     #url(r"^$", MyClassRoom.as_view(), name="mijn-klassen"),
@@ -23,6 +24,7 @@ urlpatterns = [
     url(r'search', Search.as_view(), name='search'),
     url(r'werkgroep/(?P<slug>[\w-]+)/$', WerkgroepDetail.as_view(), name='werkgroep'),
     url(r'bestuur/(?P<slug>[\w-]+)/$', BestuurDetail.as_view(), name='bestuur'),
+    url(r'informatie/(?P<slug>[\w-]+)/$', InformatieDetail.as_view(), name='informatie'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
  
 if settings.DEBUG:
