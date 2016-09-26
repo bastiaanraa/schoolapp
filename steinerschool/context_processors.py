@@ -1,5 +1,6 @@
 from werkgroepen.models import Werkgroep
 from classrooms.models import ClassRoom
+from bestuur.models import Bestuur
 
 
 def schoolapp_context(request):
@@ -13,8 +14,10 @@ def schoolapp_context(request):
 
     werkgroepen = Werkgroep.objects.all()
     klassen = ClassRoom.objects.all()
+    besturen = Bestuur.objects.all()
  
     return {
         'werkgroepen': werkgroepen,
         'klassen': klassen,
+        'besturen': besturen,
     }

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load cache %}
+
+
+{% block sidebar-menu %}
+    {% for b in besturen %}
+        <li {% if object == b %} class="active" {% endif %}>
+            <a href="{% url 'bestuur' b %}">{{b|title}}</a>
+        </li>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ object.naam|title }}</h1>
+{{ object.tekst|safe }}
+<h2>Leden:</h2>
+<ul>
+{% for user in object.bestuur.all %}
+	<li><a href="{% url 'profile' user.pk %}">{{ user }}</a> <a href="mailto:{{ user.email }}">{{user.email}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>Verslagen:</h2>
+<ul>
+{% for verslag in object.bestuursverslag.all %}
+	<li><a href="{{ verslag.upload.url }}">{{ verslag.upload.name }}</a></li>
+{% endfor %}
+{% endblock %}

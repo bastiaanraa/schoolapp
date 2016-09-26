@@ -11,7 +11,7 @@ from django.utils.text import capfirst
 
 from classrooms.models import ClassRoom
 from werkgroepen.models import Werkgroep
-
+from bestuur.models import Bestuur
 
 
 class ProfileManager(models.Manager):
@@ -55,6 +55,7 @@ class Profile(AbstractUser):
 	klasleerkracht = models.ManyToManyField(ClassRoom, blank=True, related_name='leerkracht')
 
 	werkgroep = models.ManyToManyField(Werkgroep, blank=True, related_name='werkgroep')
+	bestuur = models.ManyToManyField(Bestuur, blank=True, related_name='bestuur')
 
 	objects = UserManager()
 	has_email = ProfileManager()

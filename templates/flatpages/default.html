@@ -9,6 +9,13 @@
         </li>
     {% endfor %}
     {% endif %}
+    {% if '/bestuur/' in request.path %}
+    {% for b in besturen %}
+        <li {% if object == b %} class="active" {% endif %}>
+            <a href="{% url 'bestuur' b %}">{{b|title}}</a>
+        </li>
+    {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}

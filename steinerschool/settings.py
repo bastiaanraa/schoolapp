@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'profile.apps.ProfileConfig',
     'content.apps.ContentConfig',
     'werkgroepen.apps.WerkgroepenConfig',
+    'bestuur.apps.BestuurConfig',
 
 ]
 
