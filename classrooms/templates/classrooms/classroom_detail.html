@@ -71,6 +71,16 @@
                             {% endifchanged %}
                         </td>
                     </tr>
+                    {% empty %}
+                        <tr class="{{ rowcolors }}">
+                            <td>{{ student }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     {% endfor %}
             {% endfor %}
         </tbody>
