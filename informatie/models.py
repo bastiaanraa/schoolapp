@@ -36,3 +36,9 @@ class Documenten(models.Model):
 		null=True, blank=True)
 	datum = models.DateField(auto_now_add=True)
 	informatie = models.ForeignKey(Informatie, blank=True, null=True, related_name='informatie')
+
+	def filename(self):
+		return os.path.basename(self.upload.name).replace('_', ' ')
+
+	class Meta:
+		ordering = ['-datum',]

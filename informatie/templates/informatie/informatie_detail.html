@@ -18,6 +18,6 @@
 <h2>Berichten:</h2>
 <ul>
 {% for verslag in object.informatie.all %}
-	<li><a href="{{ verslag.upload.url }}">{{ verslag.upload.name }}</a>{{ verslag.datum }}</li>
+	<li><a href="{{ verslag.upload.url }}">{{ verslag.filename|lower }}</a> {{ verslag.datum }}</li>
 {% endfor %}
 {% endblock %}
