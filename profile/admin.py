@@ -352,7 +352,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				html_content = template_html.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
 				message = mail.EmailMultiAlternatives('Login gegevens voor steinerschoolgent.be', 
 							text_content, 
-							'website@steinerschoolgent.be',
+							'steinerschoolgent website <website@steinerschoolgent.be>',
 							[user.email]
 							)
 				message.attach_alternative(html_content, "text/html") 
