@@ -20,9 +20,12 @@
 {% endfor %}
 </ul>
 
-<h2>Verslagen:</h2>
-<ul>
-{% for verslag in object.bestuursverslag.all %}
-	<li><a href="{{ verslag.upload.url }}">{{ verslag.upload.name }}</a></li>
-{% endfor %}
+{% if object.bestuursverslag.all %}
+	<h2>Verslagen:</h2>
+	<ul>
+	{% for verslag in object.bestuursverslag.all %}
+		<li><a href="{{ verslag.upload.url }}">{{ verslag.upload.name }}</a></li>
+	{% endfor %}
+{% endif %}
+
 {% endblock %}
