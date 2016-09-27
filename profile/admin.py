@@ -11,7 +11,9 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.hashers import make_password
 from django.contrib.admin import helpers
 from django.template.response import TemplateResponse
+from django.template.loader import get_template
 from django.db import transaction, IntegrityError
+from django.core import mail 
 
 from django.utils import encoding
 
@@ -333,32 +335,39 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				request._set_post(post)
 		return super(UserAdmin, self).changelist_view(request, extra_context)
 
-	def send_password_mail(self, user,request):
-		from django.core.mail import send_mail
-		from django.template.loader import get_template
+	def send_password_mail(self, queryset,request):
+
 		# WAT ALS GEBRUIKS HUN EMAIL AANGEPAST HEBBEN???
-		
-		
+		connection = mail.get_connection()
+
+		# Manually open the connection
+		connection.open()
+
 		template_text = get_template('send_password.txt')
 		template_html = get_template('send_password.html')
-		
+		messages = []
+		for user in queryset:
+			if user.email:
+				text_content = template_text.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
+				html_content = template_html.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
+				message = mail.EmailMultiAlternatives('Login gegevens voor steinerschoolgent.be', 
+							text_content, 
+							'website@steinerschoolgent.be',
+							[user.email]
+							)
+				message.attach_alternative(html_content, "text/html") 
+				messages.append(message)
 
-		text_content = template_text.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
-		html_content = template_html.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
-		
-		send_mail(
-			'Login gegevens voor steinerschoolgent.be', 
-			text_content, 
-			'website@steinerschoolgent.be',
-			[user.email],
-			html_message = html_content,
-			fail_silently=False)
+		# Send the two emails in a single call -
+		connection.send_messages(messages)
+		# The connection was already open so send_messages() doesn't close it.
+		# We need to manually close the connection.
+		connection.close()
+
 
 	def send_password_selected(self, request, queryset):
 		if request.POST.get('post'):
-			for i in queryset:
-				if i.email:
-					self.send_password_mail(i, request)
+			self.send_password_mail(queryset, request)
 			self.message_user(request, "Mail sent successfully ")
 		else:
 			context = {
@@ -374,9 +383,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	def send_password_all(self, request, queryset):
 		queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_leerling=False).exclude(email='')
 		if request.POST.get('post'):
-			for i in queryset:
-				if i.email:
-					self.send_password_mail(i)
+			self.send_password_mail(queryset,request)
 			self.message_user(request, "Mail sent successfully ")
 		else:
 			context = {
