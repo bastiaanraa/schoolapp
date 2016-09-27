@@ -35,9 +35,9 @@ passwords.read(PASSWORD_FILE)
 SECRET_KEY = 'b_%p_igepc@8_(5%j3vlwg@(pe+r!*!w7#_n5%ftt$3su_t=b@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = passwords.get('debug', 'debug', False)
+DEBUG = passwords.getboolean('debug', 'debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['intern.steinerschoolgent.be', 'intern.steinerschool.gent', '37.139.14.100']
 
 SITE_ID = 1
 
