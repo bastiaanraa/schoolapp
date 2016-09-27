@@ -20,7 +20,8 @@
     <a href="{% url 'profile' object.pk %}">{{ object }}</a>
     {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
     {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
-    {% if object.is_leerkracht %}<i>leerkracht</i></br>{% endif %}
+    {% if object.is_leerkracht %}<i>leerkracht
+      {% for klas in object.klasleerkracht.all %} klas {{ klas }}{%endfor%}</i></br>{% endif %}
     {% if not object.is_leerling %}
       {% if object.adres %}{{ object.get_address }}<br />
       {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}

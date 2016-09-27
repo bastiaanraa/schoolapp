@@ -8,6 +8,8 @@
 {% block content %}
     <h1>{{ object }}{% if object.klas %} <a href="{% url 'klas' object.klas %}">klas {{ object.klas }}</a>{% endif %}</h1>
     {% if object.is_medewerker %}<i>medewerker</i></br>{% endif %}
+    {% if object.is_leerkracht %}<i>leerkracht
+      {% for klas in object.klasleerkracht.all %} klas {{ klas }}{%endfor%}</i></br>{% endif %}
     <p>{% if not object.is_leerling %}
         {% if object.adres %}{{ object.get_address }}<br />
         {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
