@@ -21,7 +21,8 @@
   <body class="{% block bodyclass %}{% endblock %}">
     <header class="container masthead" role="banner">
     <div class='fixed sitetitle'>
-      Vrije R. Steinerschool Basisschool – Middelbare Steinerschool Vlaanderen Gent
+      <a href='http://steinerschoolgent.be'>
+      Vrije R. Steinerschool Basisschool – Middelbare Steinerschool Vlaanderen Gent</a>
     </div>
   </header>
   <div  class='container'>
@@ -35,7 +36,7 @@
     <div class="container collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       {% if request.user.is_authenticated %}
       <ul id="menu-header-menu" class="menu">
-        <li class="menu-item"><a href="/">HOME</a></li>
+        <li class="menu-item"><a href="/">VOOR OUDERS</a></li>
         <li class="menu-item"><a href="{% url 'search' %}">ZOEK IN SCHOOLGIDS</a></li>
         <li class="menu-item"><a href="{% url 'schoolgids' %}">SCHOOLGIDS</a></li>
         <li class="menu-item"><a href="/bestuur">BESTUUR</a></li>
