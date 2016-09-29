@@ -16,8 +16,12 @@ def schoolapp_context(request):
     klassen = ClassRoom.objects.all()
     besturen = Bestuur.objects.all()
     mijn_klassen = []
-    for child in request.user.parents.all():
-        mijn_klassen.append(child.klas)
+    try:
+        for child in request.user.parents.all():
+            mijn_klassen.append(child.klas)
+    except Exception, e:
+        pass
+    
  
     return {
         'werkgroepen': werkgroepen,
