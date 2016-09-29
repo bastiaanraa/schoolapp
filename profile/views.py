@@ -2,10 +2,13 @@ import operator
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, RedirectView
+from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout as auth_logout
+from django.contrib import messages
 
 from profile.models import Profile
+from profile.forms import SendPasswordForm
 
 
 class ProfileDetail(LoginRequiredMixin, DetailView):
@@ -78,3 +81,16 @@ class LogoutView(RedirectView):
 		auth_logout(request)
 		return super(LogoutView, self).get(request, *args, **kwargs)
 
+
+from django.contrib.messages.views import SuccessMessageMixin
+class SendPasswordView(SuccessMessageMixin, FormView):
+    template_name = 'sendpasswordform.html'
+    form_class = SendPasswordForm
+    success_url = '/'
+    success_message = "E-mail met login gegevens is verstuurd."
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email(form.cleaned_data.get('email'), self.request)
+        return super(SendPasswordView, self).form_valid(form)

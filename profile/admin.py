@@ -21,6 +21,7 @@ from import_export import resources, fields, widgets
 from import_export.admin import ImportMixin
 
 from profile.models import Profile
+from profile.utils import send_password_mail
 from classrooms.models import ClassRoom
 
 import logging
@@ -335,39 +336,10 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				request._set_post(post)
 		return super(UserAdmin, self).changelist_view(request, extra_context)
 
-	def send_password_mail(self, queryset,request):
-
-		# WAT ALS GEBRUIKS HUN EMAIL AANGEPAST HEBBEN???
-		connection = mail.get_connection()
-
-		# Manually open the connection
-		connection.open()
-
-		template_text = get_template('send_password.txt')
-		template_html = get_template('send_password.html')
-		messages = []
-		for user in queryset:
-			if user.email:
-				text_content = template_text.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
-				html_content = template_html.render({"voornaam": user.first_name,"wachtwoord": user.make_pw_hash(user.username), "email": user.email}, request)
-				message = mail.EmailMultiAlternatives('Login gegevens voor steinerschoolgent.be', 
-							text_content, 
-							'steinerschoolgent website <website@steinerschoolgent.be>',
-							[user.email]
-							)
-				message.attach_alternative(html_content, "text/html") 
-				messages.append(message)
-
-		# Send the two emails in a single call -
-		connection.send_messages(messages)
-		# The connection was already open so send_messages() doesn't close it.
-		# We need to manually close the connection.
-		connection.close()
-
 
 	def send_password_selected(self, request, queryset):
 		if request.POST.get('post'):
-			self.send_password_mail(queryset, request)
+			send_password_mail(queryset, request)
 			self.message_user(request, "Mail sent successfully ")
 		else:
 			context = {
@@ -383,7 +355,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	def send_password_all(self, request, queryset):
 		queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_leerling=False).exclude(email='')
 		if request.POST.get('post'):
-			self.send_password_mail(queryset,request)
+			send_password_mail(queryset,request)
 			self.message_user(request, "Mail sent successfully ")
 		else:
 			context = {

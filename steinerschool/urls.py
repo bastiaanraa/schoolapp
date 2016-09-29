@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from profile.views import ProfileDetail, Search, LogoutView
+from profile.views import ProfileDetail, Search, LogoutView, SendPasswordView
 from classrooms.views import ClassRooms, ClassRoomDetail, MyClassRoom
 from werkgroepen.views import WerkgroepDetail
 from bestuur.views import BestuurDetail
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
+    url(r'^accounts/sendpass/', SendPasswordView.as_view(), name='sendpass'),
     url(r'^schoolgids', MyClassRoom.as_view(), name="schoolgids"),
     url(r'^klas/(?P<slug>[\w-]+)/$', ClassRoomDetail.as_view(), name='klas'),
     url(r'^klassen', ClassRooms.as_view(), name='klassen'),
