@@ -45,6 +45,12 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		return context
 
 
+class MedewerkersListView(LoginRequiredMixin, ListView):
+	model = Profile
+	template_name = "profile/medewerkers_list.html"
+
+	def get_queryset(self):
+		return Profile.objects.filter(is_medewerker = True)
 
 class Search(LoginRequiredMixin, ListView):
 

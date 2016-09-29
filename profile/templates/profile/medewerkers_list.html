@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block sidebar-menu %}
+    {% for klas in klassen %}
+        <li {% if object == klas %} class="active" {% endif %}>
+            <a {% if klas in mijn_klassen %} style="font-weight:bold;font-style: italic;"{% endif %}href="{% url 'klas' klas %}">Klas {{klas}}</a>
+        </li>
+    {% endfor %}
+    <li {% if '/medewerkers/' in request.path %} class="active" {% endif %}>
+      <a href="{% url 'medewerkerslist' %}">Leerkrachten en medewerkers</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+<h1>Leerkrachten en medewerkers</h1>
+{% for object in object_list %}
+	<div>
+    {{ object }}
+    {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
+    {% if object.is_leerkracht %}<i>leerkracht
+      {% for klas in object.klasleerkracht.all %} klas {{ klas }}{%endfor%}</i></br>{% endif %}
+    {% if not object.is_leerling %}
+      {% if object.adres %}{{ object.get_address }}<br />
+      {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
+      {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+      {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+      {% if object.email %}{{ object.email }}<br />{% endif %}
+    {% endif %}
+
+    {% for user in object.parents.all %}
+        <a href="{% url 'profile' user.pk %}">{{ user|safe }}</a> 
+          {% if user.klas %}
+            (<a href="{% url 'klas' user.klas %}"><i>klas {{user.klas}}</i></a>)
+          {% endif %}&nbsp;
+    {% endfor %}
+    <br>
+  </div>
+{% empty %}
+  {% if searchterm %}
+	 Geen resultaten gevonden
+   {% endif %}
+{% endfor %}
+        
+{% endblock %}
