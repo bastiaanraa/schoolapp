@@ -3,13 +3,11 @@
 
 
 {% block sidebar-menu %}
-{% cache 10 sidebar object.pk %}
     {% for klas in klassen %}
         <li {% if object == klas %} class="active" {% endif %}>
-            <a href="{% url 'klas' klas %}">Klas {{klas}}</a>
+            <a {% if klas in mijn_klassen %} style="font-weight:bold;font-style: italic;"{% endif %}href="{% url 'klas' klas %}">Klas {{klas}}</a>
         </li>
     {% endfor %}
-{% endcache %}
 {% endblock %}
 
 {% block content %}
