@@ -41,6 +41,12 @@ ALLOWED_HOSTS = ['intern.steinerschoolgent.be', 'intern.steinerschool.gent', '37
 
 SITE_ID = 1
 
+ADMINS = (
+    ('Bastiaan Raa', 'bastiaanraa@gmail.com'),
+)
+
+MANAGERS = ADMINS
+
 AUTH_USER_MODEL = 'profile.Profile'
 # Application definition
 
