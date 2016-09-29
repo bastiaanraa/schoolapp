@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 from profile.models import Profile
@@ -13,7 +13,6 @@ class SendPasswordForm(forms.Form):
 	def send_email(self, email, request):
 		# send email using the self.cleaned_data dictionary
 		u = Profile.objects.filter(email=email)
-		print u
 		send_password_mail(u,request)
 		
 
@@ -25,3 +24,5 @@ class SendPasswordForm(forms.Form):
 			return cleaned_data
 		except ObjectDoesNotExist, e:
 			raise forms.ValidationError("Onbekend e-mailadres.")
+		except MultipleObjectsReturned, e:
+			return cleaned_data
