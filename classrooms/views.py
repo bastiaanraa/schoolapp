@@ -15,14 +15,16 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 		
 		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).prefetch_related("parents").order_by('first_name')
 		#print self.object.klas_set.all() DIT MOET TOCH WERKEN???
-		context['all_email'] = ''
+
+		all_email = ''
 		for student in context['students']:
 			for parent in student.parents.all():
-				context['all_email'] += parent.email+";"
+				all_email += parent.email+", "
+		context['all_email'] = all_email
 		
 		return context
 
-class MyClassRoom(LoginRequiredMixin, DetailView):
+class MyClassRoom(ClassRoomDetail):
 	model = ClassRoom
 	
 	myKlas = None
@@ -33,13 +35,6 @@ class MyClassRoom(LoginRequiredMixin, DetailView):
 		except:
 			pass
 		return super(MyClassRoom, self).dispatch(request, *args, **kwargs)
-
-	def get_context_data(self, *args, **kwargs):
-		# Call the base implementation first to get a context
-		context = super(MyClassRoom, self).get_context_data(*args, **kwargs)
-		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.myKlas).order_by('first_name')
-		context["klasouders"] = Profile.objects.filter(is_klasouder=True, klas_ouder=self.myKlas)
-		return context
 
 	def get_object(self):
 		"""

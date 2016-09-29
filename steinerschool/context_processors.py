@@ -15,9 +15,13 @@ def schoolapp_context(request):
     werkgroepen = Werkgroep.objects.all()
     klassen = ClassRoom.objects.all()
     besturen = Bestuur.objects.all()
+    mijn_klassen = []
+    for child in request.user.parents.all():
+        mijn_klassen.append(child.klas)
  
     return {
         'werkgroepen': werkgroepen,
         'klassen': klassen,
         'besturen': besturen,
+        'mijn_klassen': mijn_klassen,
     }
