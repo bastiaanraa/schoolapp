@@ -13,8 +13,8 @@
     <p>{% if not object.is_leerling %}
         {% if object.adres %}{{ object.get_address }}<br />
         {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
-        {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
-        {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+        {% if object.telefoon %}gezinstelefoon: {{ object.telefoon }}<br />{% endif %}
+        {% if object.gsm %}gsm: {{ object.gsm }}<br />{% endif %}
         {% if object.email %}{{ object.email }}{% endif %}
     {% endif %}</p>
     {% if object.is_ouder %}
