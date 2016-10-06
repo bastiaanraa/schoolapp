@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-
+{% load cache %}
 
 {% block content %}
+{% cache 3600 classroom object.pk %}
 {{ tekst.content|safe }}
 <table cellspacing="30px">
     <thead>
@@ -42,4 +43,5 @@
         {% endfor %}
     </tbody>
 </table>
+{% endcache %}
 {% endblock %}
