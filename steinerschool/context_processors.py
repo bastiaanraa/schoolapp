@@ -10,6 +10,8 @@ def schoolapp_context(request):
     :return: the dictionary to be merged into the context, including the event information.
     """
         
+    # cache!!?
+    
     werkgroepen = None
 
     werkgroepen = Werkgroep.objects.all()
@@ -17,7 +19,7 @@ def schoolapp_context(request):
     besturen = Bestuur.objects.all()
     mijn_klassen = []
     try:
-        for child in request.user.parents.all():
+        for child in request.user.parents.all().select_related('klas'):
             mijn_klassen.append(child.klas)
     except Exception, e:
         pass
