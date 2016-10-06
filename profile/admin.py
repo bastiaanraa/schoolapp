@@ -303,21 +303,35 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	#inlines = (ProfileInline, )
 	list_filter = ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas']
-	fieldsets = (
-		(None, {'fields': ('username','first_name', 'last_name', 'password')}),
-		('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
-		('Personal info', {'fields': ('geboortedatum', 'overleden','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
-		('Privacy', {'fields': ('hide_address', 'hide_email', 'hide_phone')}),
-		('Gezin', {'fields': ('gescheiden','parents',)}),
-		('Klas', {'fields': ('klas',)}),
-		('Klasouder', {'fields': ('klas_ouder',)}),
-		('Leerkracht', {'fields': ('klasleerkracht',)}),
-		('Werkgroep', {'fields': ('werkgroep',)}),
-		('Bestuur', {'fields': ('bestuur',)}),
-		('Permissions', {'fields': ('is_staff',)}),
-	)
+	
 	filter_horizontal = ('parents',)
 	actions = ['send_password_selected', 'send_password_all']
+
+	def get_fieldsets(self, request, obj=None):
+		if not obj:
+			return self.add_fieldsets
+
+		if request.user.is_superuser:
+			perm_fields = ('is_active', 'is_staff', 'is_superuser',
+						   'groups', 'user_permissions')
+		else:
+			# modify these to suit the fields you want your
+			# staff user to be able to edit
+			perm_fields = ('is_active', 'is_staff', 'groups')
+
+		return [(None, {'fields': ('username','first_name', 'last_name', 'password')}),
+				('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
+				('Personal info', {'fields': ('geboortedatum', 'overleden','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
+				('Privacy', {'fields': ('hide_address', 'hide_email', 'hide_phone')}),
+				('Gezin', {'fields': ('gescheiden','parents',)}),
+				('Klas', {'fields': ('klas',)}),
+				('Klasouder', {'fields': ('klas_ouder',)}),
+				('Leerkracht', {'fields': ('klasleerkracht',)}),
+				('Werkgroep', {'fields': ('werkgroep',)}),
+				('Bestuur', {'fields': ('bestuur',)}),
+				('Permissions', {'fields': perm_fields}),
+				('Important dates', {'fields': ('last_login', 'date_joined')})]
+
 
 	#def formfield_for_manytomany(self, db_field, request, **kwargs):
 		# enkel tonen bij leerlingen?
@@ -373,5 +387,5 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 
 
 # Re-register UserAdmin
-admin.site.unregister(Group)
+#admin.site.register(Group)
 admin.site.register(Profile, UserAdmin)
