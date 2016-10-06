@@ -14,7 +14,6 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 		context = super(ClassRoomDetail, self).get_context_data(**kwargs)
 		
 		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).prefetch_related("parents").order_by('first_name')
-		#print self.object.klas_set.all() DIT MOET TOCH WERKEN???
 
 		all_email = ''
 		for student in context['students']:
@@ -23,7 +22,7 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 					all_email += parent.email+", "
 		for leerkracht in self.object.leerkracht.all():
 			all_email += leerkracht.email + ", "
-		print all_email
+
 		context['all_email'] = all_email
 		
 		return context
