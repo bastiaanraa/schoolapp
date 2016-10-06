@@ -16,7 +16,7 @@
 {% block content %}
 
 {% if object %}
-{% cache 86400 classroom object.pk %}
+{% cache 3600 classroom object.pk %}
     <h2>Klas {{ object }}</h2>
     <div>
         <p style="float:left;">
@@ -35,7 +35,7 @@
 {% endcache %}
         <p style="float:right;margin-right:10px;">
             {% if object in request.user.klasleerkracht.all or object in mijn_klassen or request.user.is_medewerker %}
-            {% cache 86400 emaillist object.pk %}
+            {% cache 3600 emaillist object.pk %}
             <i class="fa fa-long-arrow-right" aria-hidden="true"></i> <a href="mailto:?BCC= {{all_email}}">
             Verstuur e-mail naar alle ouders + klasleerkracht</a>
             {% endcache %}
