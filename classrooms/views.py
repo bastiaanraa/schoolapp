@@ -20,8 +20,10 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 			for parent in student.parents.all():
 				if parent.email:
 					all_email += parent.email+", "
-		for leerkracht in self.object.leerkracht.all():
-			all_email += leerkracht.email + ", "
+		
+		if self.object:
+			for leerkracht in self.object.leerkracht.all():
+				all_email += leerkracht.email + ", "
 
 		context['all_email'] = all_email
 		
