@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load cache %}
+
+{% block content %}
+<h1>Kalender</h1>
+<table class="white-borders">
+{% for object in object_list %}
+	<tr class="{% cycle 'even' 'odd' %}">
+		<td>
+			{% if object.einddatum %}
+				{{ object.startdatum|date:"D d b" }} tem {{ object.einddatum|date:"D d b o" }}
+			{% else %}
+				{{ object.startdatum|date:"D d b o" }}
+			{% endif %}
+		</td>
+		<td>
+			{{ object.titel }}
+		</td>
+		<td>
+			{{ object.get_doelgroep_display }}
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock content %}

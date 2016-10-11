@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'import_export',
     'debug_toolbar',
+    'multiselectfield',
 
     'classrooms.apps.ClassRoomsConfig',
     'profile.apps.ProfileConfig',
@@ -73,6 +74,7 @@ INSTALLED_APPS = [
     'werkgroepen.apps.WerkgroepenConfig',
     'bestuur.apps.BestuurConfig',
     'informatie.apps.InformatieConfig',
+    'schoolcalendar.apps.SchoolcalendarConfig',
 
 ]
 
