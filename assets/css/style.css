@@ -294,6 +294,25 @@ table tr.even {
   background-color: #ededf0;
 }
 
+table.white-borders tr.odd td {
+  font-size: x-small;
+  color: white;
+  background-color: #5f7a9c;
+  text-decoration: none;
+  border: 0.1mm solid white;
+  margin: 0mm;
+  padding: 2mm;
+}
+table.white-borders tr.even td {
+  font-size: x-small;
+  color: white;
+  background-color: #4e698c;
+  text-decoration: none;
+  border: 0.1mm solid white;
+  margin: 0mm;
+  padding: 2mm;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   /* tegen het verspingen van de pagina */
