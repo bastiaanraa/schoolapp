@@ -174,9 +174,7 @@ nav ul li a:hover{
   /*margin-right: -15px;*/
   /*padding-top: 15px;*/
 }
-#content table a:link{
-  font-size: 10pt;
-}
+
 
 ul.errorlist {
   list-style: none;
@@ -204,9 +202,7 @@ table td {
 td {
   padding: 1px;
 }
-table tr td a:visited {
-  color: #337ab7;
-}
+
 .footer
 {
   margin-left: -15px;
@@ -269,48 +265,27 @@ ul.textbox {
   padding-left: 25px;
 }
 
-table tr.odd {
-  background-color: #BDCCDA;
-}
-table tr.odd a:link {
-  color: #337ab7;
-}
-table tr.odd a:hover {
-  color: #337ab7;
-  background: none;
-  text-decoration: underline;
-}
-table tr.even a:link {
-  color: #337ab7;
-}
-table tr.even a:hover {
-  color: #337ab7;
-  background: none;
-  text-decoration: underline;
-}
 
 
-table tr.even {
-  background-color: #ededf0;
-}
 
 table.white-borders tr.odd td {
-  font-size: x-small;
+  font-size: 8pt;
   color: white;
   background-color: #5f7a9c;
   text-decoration: none;
-  border: 0.1mm solid white;
   margin: 0mm;
   padding: 2mm;
 }
 table.white-borders tr.even td {
-  font-size: x-small;
+  font-size: 8pt;
   color: white;
   background-color: #4e698c;
   text-decoration: none;
-  border: 0.1mm solid white;
   margin: 0mm;
   padding: 2mm;
+}
+table.white-borders tr td a {
+  font-size: 8pt;
 }
 
 /* Small devices (tablets, 768px and up) */
