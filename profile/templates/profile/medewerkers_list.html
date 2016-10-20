@@ -33,8 +33,8 @@
     <div class="col-xs-10">
       {{ object }}
       {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
-      {% if object.is_leerkracht %}<i>leerkracht {{ object.get_doelgroep_display }}</i><br>{% endif %}
-      {% for klas in object.klasleerkracht.all %}<i>klasleerkracht klas {{ klas }}</i><br>{%endfor%}
+      {% if object.is_leerkracht %}<i>Leerkracht {{ object.get_doelgroep_display|lower }}</i><br>{% endif %}
+      {% for klas in object.klasleerkracht.all %}<i>Klasleerkracht klas {{ klas }}</i><br>{%endfor%}
       {% if object.functie %}<i>{{ object.functie }}</i><br>{% endif %}
       {% if not object.is_leerling %}
         {% if object.adres %}{{ object.get_address }}<br />
