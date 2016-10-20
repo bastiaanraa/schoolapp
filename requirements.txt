@@ -9,3 +9,4 @@ csvImporter==0.1.3.2
 django-multiselectfield==0.1.4
 #django-password-reset==0.9
 -e git://github.com/bastiaanraa/django-password-reset.git#egg=Package
+Pillow

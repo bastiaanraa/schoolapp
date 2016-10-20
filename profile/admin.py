@@ -303,9 +303,11 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	#inlines = (ProfileInline, )
 	list_filter = ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas']
+
+	readonly_fields = ('image_tag',)
 	
 	filter_horizontal = ('parents',)
-	actions = ['send_password_selected', 'send_password_all']
+	actions = ['send_password_selected', ]
 
 	def get_fieldsets(self, request, obj=None):
 		if not obj:
@@ -326,7 +328,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				('Gezin', {'fields': ('gescheiden','parents',)}),
 				('Klas', {'fields': ('klas',)}),
 				('Klasouder', {'fields': ('klas_ouder',)}),
-				('Leerkracht', {'fields': ('klasleerkracht',)}),
+				('Leerkracht/Medewerkers', {'fields': ('klasleerkracht', 'functie', 'doelgroep', 'picture', 'image_tag')}),
 				('Werkgroep', {'fields': ('werkgroep',)}),
 				('Bestuur', {'fields': ('bestuur',)}),
 				('Permissions', {'fields': perm_fields}),

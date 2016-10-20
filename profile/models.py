@@ -8,11 +8,24 @@ import hashlib
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.text import capfirst
+from django.utils.safestring import mark_safe
+
+from multiselectfield import MultiSelectField
 
 from classrooms.models import ClassRoom
 from werkgroepen.models import Werkgroep
 from bestuur.models import Bestuur
 
+DOELGROEP_CHOICES = (
+		('', '-'),
+		('KS', 'Kleuters'),
+		('BS', 'Basisschool'),
+		('OB', 'Onderbouw'),
+		('MS', 'Middelbare school'),
+		('MB', 'Middenbouw'),
+		('BB', 'Bovenbouw'),
+		('AA', 'allen'),
+		)
 
 class ProfileManager(models.Manager):
 	#custom manager
@@ -43,6 +56,10 @@ class Profile(AbstractUser):
 	gescheiden = models.BooleanField(default=False)
 	overleden = models.BooleanField(default=False)
 	opmerking = models.CharField("Opmerking leerling", max_length=255, blank=True)
+	picture = models.ImageField(upload_to='profile/', blank=True, null=True)
+	# voor leerkrachten
+	doelgroep = MultiSelectField(choices=DOELGROEP_CHOICES, blank=True, default='')
+	functie = models.CharField(max_length=255, blank=True)
 
 	# privacy
 	hide_address = models.BooleanField(default=False)
@@ -112,7 +129,12 @@ class Profile(AbstractUser):
 				).exclude(pk=self.pk)[0]
 		except Exception, e:
 			return None
-		
+	
+	def image_tag(self):
+		if self.picture:
+			return mark_safe('<img src="/media/%s" width="auto" height="150px" title="%s"/>' % (self.picture, self))
+		return ""
+	image_tag.short_description = 'Image'
 	
 	def make_pw_hash(self, user_name):
 		#Function to create hashed password

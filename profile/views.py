@@ -52,6 +52,36 @@ class MedewerkersListView(LoginRequiredMixin, ListView):
 	def get_queryset(self):
 		return Profile.objects.filter(is_medewerker = True)
 
+	def get_context_data(self, *args, **kwargs):
+		context = super(MedewerkersListView, self).get_context_data(**kwargs)
+
+		all_email = ''
+		for p in Profile.objects.filter(is_medewerker = True):
+			if p.email:
+				all_email += p.email+", "
+		context['all_email'] = all_email
+
+		leerkrachten_email = ''
+		for p in Profile.objects.filter(is_leerkracht = True):
+			if p.email:
+				leerkrachten_email += p.email+", "
+		context['leerkrachten_email'] = leerkrachten_email
+
+		BS_email = ''
+		for p in Profile.objects.filter(is_leerkracht = True, doelgroep__contains='BS'):
+			if p.email:
+				BS_email += p.email+", "
+		context['BS_email'] = BS_email
+
+		MS_email = ''
+		for p in Profile.objects.filter(is_leerkracht = True, doelgroep__contains='MS'):
+			if p.email:
+				MS_email += p.email+", "
+		context['MS_email'] = MS_email
+
+		return context
+
+
 class Search(LoginRequiredMixin, ListView):
 
 	model = Profile

@@ -1,44 +1,54 @@
 {% extends "base.html" %}
 
 {% block sidebar-menu %}
-    {% for klas in klassen %}
-        <li {% if object == klas %} class="active" {% endif %}>
-            <a {% if klas in mijn_klassen %} style="font-weight:bold;font-style: italic;"{% endif %}href="{% url 'klas' klas %}">Klas {{klas}}</a>
-        </li>
-    {% endfor %}
-    <li {% if '/medewerkers/' in request.path %} class="active" {% endif %}>
-      <a href="{% url 'medewerkerslist' %}">Leerkrachten en medewerkers</a>
-    </li>
+    
 {% endblock %}
 
 {% block content %}
 <h1>Leerkrachten en medewerkers</h1>
-{% for object in object_list %}
-	<div>
-    {{ object }}
-    {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
-    {% if object.is_leerkracht %}<i>leerkracht
-      {% for klas in object.klasleerkracht.all %} klas {{ klas }}{%endfor%}</i></br>{% endif %}
-    {% if not object.is_leerling %}
-      {% if object.adres %}{{ object.get_address }}<br />
-      {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
-      {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
-      {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
-      {% if object.email %}{{ object.email }}<br />{% endif %}
-    {% endif %}
-
-    {% for user in object.parents.all %}
-        <a href="{% url 'profile' user.pk %}">{{ user|safe }}</a> 
-          {% if user.klas %}
-            (<a href="{% url 'klas' user.klas %}"><i>klas {{user.klas}}</i></a>)
-          {% endif %}&nbsp;
-    {% endfor %}
-    <br>
+<div class="row">
+  <div>
+      {% if request.user.is_medewerker or request.user.is_superuser%}
+      
+      <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+      <a href="mailto:?CC= {{BS_email}}">Verstuur e-mail naar alle leerkrachten Basis</a>
+      <br>
+      <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+      <a href="mailto:?CC= {{MS_email}}">Verstuur e-mail naar alle leerkrachten Middelbaar</a>
+      <br>
+      <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+      <a href="mailto:?CC= {{leerkrachten_email}}">Verstuur e-mail naar alle leerkrachten</a>
+      <br>
+      <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+      <a href="mailto:?BCC= {{all_email}}">Verstuur e-mail naar alle medewerkers</a>
+      <hr>
+      
+      
+      {% endif %}
   </div>
-{% empty %}
-  {% if searchterm %}
-	 Geen resultaten gevonden
-   {% endif %}
+</div>
+{% for object in object_list %}
+	<div class="row" style="margin-bottom: 15px">
+    
+    <div class="col-xs-10">
+      {{ object }}
+      {% if object.klas %}&nbsp;<i>klas {{ object.klas }}</i>{% endif %}<br />
+      {% if object.is_leerkracht %}<i>leerkracht {{ object.get_doelgroep_display }}</i><br>{% endif %}
+      {% for klas in object.klasleerkracht.all %}<i>klasleerkracht klas {{ klas }}</i><br>{%endfor%}
+      {% if object.functie %}<i>{{ object.functie }}</i><br>{% endif %}
+      {% if not object.is_leerling %}
+        {% if object.adres %}{{ object.get_address }}<br />
+        {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
+        {% if object.telefoon %}{{ object.telefoon }}<br />{% endif %}
+        {% if object.gsm %}{{ object.gsm }}<br />{% endif %}
+        {% if object.email %}<a href="mailto:{{ object.email }}">{{ object.email }}</a><br />{% endif %}
+        
+      {% endif %}
+    </div>
+    <div class="col-xs-2">
+      {{object.image_tag}}
+    </div>
+  </div>
 {% endfor %}
         
 {% endblock %}
