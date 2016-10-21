@@ -322,13 +322,12 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 			perm_fields = ('is_active', 'is_staff', 'groups')
 
 		return [(None, {'fields': ('username','first_name', 'last_name', 'password')}),
-				('Rollen', {'fields': ('is_leerling', 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker')}),
 				('Personal info', {'fields': ('geboortedatum', 'overleden','adres','postcode', 'gemeente', 'telefoon', 'gsm', 'email')}),
 				('Privacy', {'fields': ('hide_address', 'hide_email', 'hide_phone')}),
-				('Gezin', {'fields': ('gescheiden','parents',)}),
-				('Klas', {'fields': ('klas',)}),
-				('Klasouder', {'fields': ('klas_ouder',)}),
-				('Leerkracht/Medewerkers', {'fields': ('klasleerkracht', 'functie', 'doelgroep', 'picture', 'image_tag')}),
+				('Gezin', {'fields': ('is_leerling', 'is_ouder', 'gescheiden','parents',)}),
+				('Klas (leerling)', {'fields': ('klas',)}),
+				('Klasouder', {'fields': ('is_klasouder', 'klas_ouder',)}),
+				('Leerkracht/Medewerkers', {'fields': ('is_leerkracht', 'is_medewerker', 'klasleerkracht', 'functie', 'doelgroep', 'picture', 'image_tag')}),
 				('Werkgroep', {'fields': ('werkgroep',)}),
 				('Bestuur', {'fields': ('bestuur',)}),
 				('Permissions', {'fields': perm_fields}),
