@@ -278,7 +278,9 @@ ul.textbox {
   padding-left: 25px;
 }
 
-
+table.white-borders {
+  min-width: 700px;
+}
 table.white-borders tr.odd td {
   font-size: 8pt;
   color: white;
