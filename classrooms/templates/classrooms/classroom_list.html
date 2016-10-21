@@ -4,6 +4,27 @@
 {% block content %}
 {% cache 3600 classroom object.pk %}
 {{ tekst.content|safe }}
+<h2>Eerstkomende activiteiten</h2>
+<table class="white-borders">
+{% for object in calendar %}
+    <tr class="{% cycle 'even' 'odd' %}">
+        <td>
+            {% if object.einddatum %}
+                {{ object.startdatum|date:"D d b" }} tem {{ object.einddatum|date:"D d b o" }}
+            {% else %}
+                {{ object.startdatum|date:"D d b o" }}
+            {% endif %}
+        </td>
+        <td>
+            {{ object.titel }}
+        </td>
+        <td>
+            {{ object.get_doelgroep_display }}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+<h2>Overzicht klassen</h2>
 <table class="white-borders">
     <thead>
         <tr>

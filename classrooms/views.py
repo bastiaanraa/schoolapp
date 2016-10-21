@@ -1,9 +1,13 @@
+import datetime
+
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.flatpages.models import FlatPage
+from django.db.models import Q
 
 from classrooms.models import ClassRoom
 from profile.models import Profile
+from schoolcalendar.models import SchoolCalendar
 
 
 class ClassRoomDetail(LoginRequiredMixin, DetailView):
@@ -66,6 +70,13 @@ class ClassRooms(LoginRequiredMixin, ListView):
 		# add extra context
 		try:
 			context['tekst'] = FlatPage.objects.get(url='/') # get home page
+		except Exception, e:
+			raise e
+
+		# calendar items
+		try:
+			context['calendar'] = SchoolCalendar.objects.filter(
+				Q(startdatum__gte= datetime.datetime.today()) & Q(startdatum__lte= datetime.datetime.today() + datetime.timedelta(days=14)))
 		except Exception, e:
 			raise e
 		
