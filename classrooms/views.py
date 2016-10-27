@@ -80,6 +80,12 @@ class ClassRooms(LoginRequiredMixin, ListView):
 		except Exception, e:
 			raise e
 		
-		
+		klasouders_email = ""
+		klasouders = Profile.objects.filter(is_klasouder = True)
+		for klasouder in klasouders:
+			if klasouder.email:
+				klasouders_email += klasouder.email + ", "
+		context['klasouders_email'] = klasouders_email
+
 		return context
 	
