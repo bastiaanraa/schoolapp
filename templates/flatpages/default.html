@@ -12,7 +12,7 @@
     {% if '/bestuur/' in request.path %}
     {% for b in besturen %}
         <li {% if object == b %} class="active" {% endif %}>
-            <a href="{% url 'bestuur' b %}">{{b|title}}</a>
+            <a href="{% url 'bestuur' b.slug %}">{{b|title}}</a>
         </li>
     {% endfor %}
     {% endif %}
