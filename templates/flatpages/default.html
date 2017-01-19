@@ -5,7 +5,7 @@
 	{% if '/werkgroepen/' in request.path %}
     {% for werkgroep in werkgroepen %}
         <li {% if object == werkgroep %} class="active" {% endif %}>
-            <a href="{% url 'werkgroep' werkgroep %}">{{werkgroep|title}}</a>
+            <a href="{% url 'werkgroep' werkgroep.slug %}">{{werkgroep|title}}</a>
         </li>
     {% endfor %}
     {% endif %}
