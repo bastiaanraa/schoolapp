@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'import_export',
     'debug_toolbar',
+    'password_reset',
     'multiselectfield',
 
     'classrooms.apps.ClassRoomsConfig',
