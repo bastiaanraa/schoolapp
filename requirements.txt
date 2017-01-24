@@ -10,3 +10,4 @@ django-multiselectfield==0.1.4
 #django-password-reset==0.9
 -e git://github.com/bastiaanraa/django-password-reset.git#egg=django-password-reset
 Pillow
+django-ical==1.4

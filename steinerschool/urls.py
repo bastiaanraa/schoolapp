@@ -10,7 +10,8 @@ from classrooms.views import ClassRooms, ClassRoomDetail, MyClassRoom
 from werkgroepen.views import WerkgroepDetail
 from bestuur.views import BestuurDetail
 from informatie.views import InformatieDetail
-from schoolcalendar.views import SchoolCalendarListView
+from schoolcalendar.views import SchoolCalendarListView, SchoolCalendarDetail
+from schoolcalendar.feeds import EventFeed
 
 urlpatterns = [
     #url(r"^$", MyClassRoom.as_view(), name="mijn-klassen"),
@@ -29,7 +30,9 @@ urlpatterns = [
     url(r'bestuur/(?P<slug>[\w-]+)/$', BestuurDetail.as_view(), name='bestuur'),
     url(r'informatie/(?P<slug>[\w-]+)/$', InformatieDetail.as_view(), name='informatie'),
     url(r'schoolgids/medewerkers/$', MedewerkersListView.as_view(), name='medewerkerslist'),
-    url(r'kalender$', SchoolCalendarListView.as_view(), name='kalender')
+    url(r'^kalender$', SchoolCalendarListView.as_view(), name='kalender'),
+    url(r'^kalender/(?P<pk>\d+)/$', SchoolCalendarDetail.as_view(), name='kalender_detail'),
+    url(r'^kalender/feed.ics$', EventFeed()),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
  
 if settings.DEBUG:

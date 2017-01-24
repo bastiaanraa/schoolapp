@@ -27,6 +27,9 @@ class SchoolCalendar(models.Model):
 	def __str__(self):
 		return self.titel
 
+	def get_absolute_url(self):
+		from django.urls import reverse
+		return reverse('kalender_detail', args=[self.id])
 
 	class Meta:
 		verbose_name_plural = 'SchoolCalendar'

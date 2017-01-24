@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'password_reset',
     'multiselectfield',
+    'django_ical',
 
     'classrooms.apps.ClassRoomsConfig',
     'profile.apps.ProfileConfig',

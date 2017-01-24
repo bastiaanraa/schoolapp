@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db.models import Q
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import SchoolCalendar
@@ -13,3 +13,6 @@ class SchoolCalendarListView(LoginRequiredMixin, ListView):
 	def get_queryset(self):
 		return SchoolCalendar.objects.filter(
 			Q(startdatum__gte= datetime.now()) | Q(einddatum__gte= datetime.now()))
+
+class SchoolCalendarDetail(LoginRequiredMixin, DetailView):
+    model = SchoolCalendar
