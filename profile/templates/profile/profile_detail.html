@@ -10,6 +10,7 @@
     {% if object.is_leerkracht %}<i>Leerkracht {{ object.get_doelgroep_display|lower }}</i><br>{% endif %}
       {% for klas in object.klasleerkracht.all %}<i>Klasleerkracht klas {{ klas }}</i><br>{%endfor%}
       {% if object.functie %}<i>{{ object.functie }}</i><br>{% endif %}
+      {% for werkgroep in object.werkgroep.all %}{{ werkgroep }}{% endfor %}
     <p>{% if not object.is_leerling %}
         {% if object.adres %}{{ object.get_address }}<br />
         {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
