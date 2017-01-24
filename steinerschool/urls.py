@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^$', ClassRooms.as_view(), name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^accounts/reset', include('password_reset.urls')),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^accounts/sendpass/$', SendPasswordView.as_view(), name='sendpass'),
     url(r'^schoolgids/$', MyClassRoom.as_view(), name="schoolgids"),
