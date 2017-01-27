@@ -81,11 +81,33 @@ class ClassRooms(LoginRequiredMixin, ListView):
 			raise e
 		
 		klasouders_email = ""
+		klasouders_email_k = ""
+		klasouders_email_l = ""
+		klasouders_email_m = ""
+		klasouders_email_b = ""
 		klasouders = Profile.objects.filter(is_klasouder = True)
 		for klasouder in klasouders:
 			if klasouder.email:
 				klasouders_email += klasouder.email + ", "
+				for klas in klasouder.klas_ouder.all():
+					print klas
+					if klas.klascode.startswith('K'):
+						#kleuters
+						klasouders_email_k += klasouder.email
+					if klas.klascode.startswith('L'):
+						#lager
+						klasouders_email_l += klasouder.email
+					if klas.klascode.startswith('1S') or klas.klascode.startswith('2S'):
+						#middenbouw
+						klasouders_email_m += klasouder.email
+					if klas.klascode.startswith('3') or klas.klascode.startswith('4') or klas.klascode.startswith('5') or klas.klascode.startswith('6'):
+						#bovenbouw
+						klasouders_email_b += klasouder.email
 		context['klasouders_email'] = klasouders_email
+		context['klasouders_email_k'] = klasouders_email_k
+		context['klasouders_email_l'] = klasouders_email_l
+		context['klasouders_email_m'] = klasouders_email_m
+		context['klasouders_email_b'] = klasouders_email_b
 
 		return context
 	
