@@ -90,7 +90,7 @@ class ClassRooms(LoginRequiredMixin, ListView):
 			if klasouder.email:
 				klasouders_email += klasouder.email + ", "
 				for klas in klasouder.klas_ouder.all():
-					if klas.klascode.startswith('K'):
+					if klas.klascode.startswith('K') or klas.klascode.startswith('P'):
 						#kleuters
 						klasouders_email_k += klasouder.email + ", "
 					if klas.klascode.startswith('L'):
