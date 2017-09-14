@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'password_reset',
     'multiselectfield',
     'django_ical',
+    'adminsortable',
 
     'classrooms.apps.ClassRoomsConfig',
     'profile.apps.ProfileConfig',

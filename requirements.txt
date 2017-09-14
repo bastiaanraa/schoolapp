@@ -11,3 +11,4 @@ django-multiselectfield==0.1.4
 -e git://github.com/bastiaanraa/django-password-reset.git#egg=django-password-reset
 Pillow
 django-ical==1.4
+django-admin-sortable==2.1 
