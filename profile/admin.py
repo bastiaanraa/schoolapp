@@ -70,16 +70,16 @@ class ProfileResource(resources.ModelResource):
 		skip_unchanged = True
 		report_skipped = True
 
-	def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+	#def before_import(self, dataset, using_transactions, dry_run, **kwargs):
 	#def before_import(self, dataset, dry_run, **kwargs):
 		# zet eerst alle lln en ouders inactief
-		if not dry_run:
-			queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_leerling=True)
-			queryset.update(is_active=False)
-			queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_ouder=True)
-			queryset.update(is_active=False)
+	#	if not dry_run:
+			#queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_leerling=True)
+			#queryset.update(is_active=False)
+			#queryset = Profile.objects.filter(is_active=True, is_superuser=False, is_ouder=True)
+			#queryset.update(is_active=False)
 			# MAG NIET WANT 2 X APART IMPORT
-			pass
+	#		pass
 
 
 	def dehydrate_username(self, profile):
