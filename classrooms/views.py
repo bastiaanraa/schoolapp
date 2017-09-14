@@ -17,7 +17,7 @@ class ClassRoomDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ClassRoomDetail, self).get_context_data(**kwargs)
 		
-		context['students'] = Profile.objects.filter(is_leerling=True, klas=self.object).prefetch_related("parents").order_by('first_name')
+		context['students'] = Profile.objects.filter(is_active=True,is_leerling=True, klas=self.object).prefetch_related("parents").order_by('first_name')
 
 		all_email = ''
 		for student in context['students']:

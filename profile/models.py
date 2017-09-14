@@ -27,6 +27,12 @@ DOELGROEP_CHOICES = (
 		('AA', 'allen'),
 		)
 
+class CustomUserManager(UserManager):
+	use_for_related_fields = True
+
+	def get_query_set(self):
+		return super(CustomUserManager, self).get_query_set().filter(is_active=True)
+
 class ProfileManager(models.Manager):
 	#custom manager
 	def has_email(self):
@@ -74,7 +80,7 @@ class Profile(AbstractUser):
 	werkgroep = models.ManyToManyField(Werkgroep, blank=True, related_name='werkgroep')
 	bestuur = models.ManyToManyField(Bestuur, blank=True, related_name='bestuur')
 
-	objects = UserManager()
+	objects = CustomUserManager()
 	has_email = ProfileManager()
 	
 	def __str__(self):

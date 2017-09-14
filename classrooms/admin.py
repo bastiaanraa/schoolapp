@@ -20,6 +20,7 @@ class KlasOuderInline(admin.TabularInline):
 class ClassroomAdmin(admin.ModelAdmin):
 	#form = ClassRoomForm
 	inlines = [LeerkrachtInline, KlasOuderInline, StudentInline]
+	list_display = ["klasnaam", "klascode"]
 	#prepopulated_fields = {"slug": ("klasnaam",)}
 	fieldsets = (
 		(None, {'fields' : ('klascode', 'klasnaam', )}),

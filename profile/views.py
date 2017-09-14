@@ -18,7 +18,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ProfileDetail, self).get_context_data(**kwargs)
 		if self.object.is_ouder:	
-			context['children'] = Profile.objects.filter(is_leerling=True, parents=self.object).prefetch_related("parents")
+			context['children'] = Profile.objects.filter(is_active=True,is_leerling=True, parents=self.object).prefetch_related("parents")
 		
 			# zelfde adres voor partner
 			try:
@@ -105,7 +105,7 @@ class Search(LoginRequiredMixin, ListView):
 					   (Q(username__icontains=q) for q in query_list))
 			)
 
-		return result.filter(is_superuser=False, overleden=False)
+		return result.filter(is_active=True,is_superuser=False, overleden=False)
 
 class LogoutView(RedirectView):
 	"""
