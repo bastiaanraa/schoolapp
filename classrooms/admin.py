@@ -23,7 +23,7 @@ class ClassroomAdmin(admin.ModelAdmin):
 	list_display = ["klasnaam", "klascode"]
 	#prepopulated_fields = {"slug": ("klasnaam",)}
 	fieldsets = (
-		(None, {'fields' : ('klascode', 'klasnaam', )}),
+		(None, {'fields' : ('klascode', 'klasnaam', 'slug')}),
 		)
 	#readonly_fields = ("slug",)
 
