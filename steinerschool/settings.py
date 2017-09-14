@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     #'flatpages_tinymce',
     'django_extensions',
     'import_export',
-    'debug_toolbar',
+    #'debug_toolbar',
     'password_reset',
     'multiselectfield',
     'django_ical',
@@ -81,7 +81,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
