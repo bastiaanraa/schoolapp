@@ -3,8 +3,6 @@ from django.contrib import admin
 from classrooms.models import ClassRoom
 from profile.models import Profile
 
-from adminsortable.admin import SortableAdmin
-
 class StudentInline(admin.TabularInline):
 	model = Profile
 
@@ -19,7 +17,7 @@ class LeerkrachtInline(admin.TabularInline):
 class KlasOuderInline(admin.TabularInline):
 	model = Profile.klas_ouder.through
 
-class ClassroomAdmin(SortableAdmin):
+class ClassroomAdmin(admin.ModelAdmin):
 	#form = ClassRoomForm
 	inlines = [LeerkrachtInline, KlasOuderInline, StudentInline]
 	list_display = ["klasnaam", "klascode"]
