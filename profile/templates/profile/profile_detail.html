@@ -8,9 +8,9 @@
 {% block content %}
     <h1>{{ object }}{% if object.klas %} <a href="{% url 'klas' object.klas %}">klas {{ object.klas }}</a>{% endif %}</h1>
     {% if object.is_leerkracht %}<i>Leerkracht {{ object.get_doelgroep_display|lower }}</i><br>{% endif %}
-      {% for klas in object.klasleerkracht.all %}<i>Klasleerkracht klas {{ klas }}</i><br>{%endfor%}
-      {% if object.functie %}<i>{{ object.functie }}</i><br>{% endif %}
-      {% for werkgroep in object.werkgroep.all %}{{ werkgroep }}{% endfor %}
+    {% for klas in object.klasleerkracht.all %}<i>Klasleerkracht klas {{ klas }}</i><br>{%endfor%}
+    {% if object.functie %}<i>{{ object.functie }}</i><br>{% endif %}
+     
     <p>{% if not object.is_leerling %}
         {% if object.adres %}{{ object.get_address }}<br />
         {{ object.get_postcode }} {{ object.get_gemeente }}<br />{% endif %}
@@ -24,6 +24,7 @@
         {% for child in children %}
             <li>{{ child }}&nbsp;&nbsp;<a href="{% url 'klas' child.klas %}"><i>Klas {{ child.klas }}</i></a></li>
         {% endfor %}
+        </ul>
         {% if partner %}
             <h2>Partner:</h2>
             <a href="{% url 'profile' partner.pk %}">{{ partner }}</a>
@@ -35,12 +36,24 @@
         {% for parent in object.parents.all %}
             <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>
         {% endfor %}
+        </ul>
         {% if siblings %}
             <h2>Broers en zussen:</h2>
+            <ul class='list-unstyled'>
             {% for sibling in siblings %}
                 <li>{{ sibling }} <a href="{% url 'klas' sibling.klas %}"><i>klas {{ sibling.klas }}</i></a></li>
             {% endfor %}
+            </ul>
         {% endif %}
+    {% endif %}
+
+    {% if object.werkgroep.all %}
+        <h2>Werkgroep(en):</h2>
+        <ul class='list-unstyled'>
+        {% for werkgroep in object.werkgroep.all %}
+            <li>{{ werkgroep }}</li>
+        {% endfor %}
+        </ul>
     {% endif %}
     
         
