@@ -18,11 +18,11 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		# Call the base implementation first to get a context
 		context = super(ProfileDetail, self).get_context_data(**kwargs)
 		if self.object.is_ouder:	
-			context['children'] = Profile.objects.filter(is_active=True,is_leerling=True, parents=self.object).prefetch_related("parents")
+			context['children'] = Profile.active.filter(is_leerling=True, parents=self.object).prefetch_related("parents")
 		
 			# zelfde adres voor partner
 			try:
-				context['partner'] = Profile.objects.filter( \
+				context['partner'] = Profile.active.filter( \
 				adres=self.object.adres, \
 				postcode=self.object.postcode,
 				is_ouder=True, overleden=False
@@ -33,7 +33,7 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 		elif self.object.is_leerling:
 			# zelfde adres voor siblings
 			try:
-				context['siblings'] = Profile.objects.filter( \
+				context['siblings'] = Profile.active.filter( \
 				adres=self.object.adres, \
 				postcode=self.object.postcode,
 				is_leerling=True
@@ -50,31 +50,31 @@ class MedewerkersListView(LoginRequiredMixin, ListView):
 	template_name = "profile/medewerkers_list.html"
 
 	def get_queryset(self):
-		return Profile.objects.filter(is_medewerker = True)
+		return Profile.active.filter(is_medewerker = True)
 
 	def get_context_data(self, *args, **kwargs):
 		context = super(MedewerkersListView, self).get_context_data(**kwargs)
 
 		all_email = ''
-		for p in Profile.objects.filter(is_medewerker = True):
+		for p in Profile.active.filter(is_medewerker = True):
 			if p.email:
 				all_email += p.email+", "
 		context['all_email'] = all_email
 
 		leerkrachten_email = ''
-		for p in Profile.objects.filter(is_leerkracht = True):
+		for p in Profile.active.filter(is_leerkracht = True):
 			if p.email:
 				leerkrachten_email += p.email+", "
 		context['leerkrachten_email'] = leerkrachten_email
 
 		BS_email = ''
-		for p in Profile.objects.filter(is_leerkracht = True, doelgroep__contains='BS'):
+		for p in Profile.active.filter(is_leerkracht = True, doelgroep__contains='BS'):
 			if p.email:
 				BS_email += p.email+", "
 		context['BS_email'] = BS_email
 
 		MS_email = ''
-		for p in Profile.objects.filter(is_leerkracht = True, doelgroep__contains='MS'):
+		for p in Profile.active.filter(is_leerkracht = True, doelgroep__contains='MS'):
 			if p.email:
 				MS_email += p.email+", "
 		context['MS_email'] = MS_email
@@ -96,7 +96,7 @@ class Search(LoginRequiredMixin, ListView):
 		query = self.request.GET.get('q')
 		if query:
 			query_list = query.split()
-			result = Profile.objects.filter(
+			result = Profile.active.filter(
 				reduce(operator.and_,
 					   (Q(first_name__icontains=q) for q in query_list)) |
 				reduce(operator.and_,

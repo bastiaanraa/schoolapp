@@ -27,16 +27,34 @@ DOELGROEP_CHOICES = (
 		('AA', 'allen'),
 		)
 
+class ProfileQuerySet(models.query.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+class ProductPhotoManager(models.Manager):
+    use_for_related_fields = True
+
+    def get_query_set(self):
+        return ProductPhotoQuerySet(self.model)
+
+    def live(self, *args, **kwargs):
+        return self.get_query_set().live(*args, **kwargs)
+
 class CustomUserManager(UserManager):
 	use_for_related_fields = True
 
-	def get_query_set(self):
-		return super(CustomUserManager, self).get_query_set().filter(is_active=True)
+	def get_queryset(self):
+		return ProfileQuerySet(self.model)
+
+	def active(self, *args, **kwargs):
+		return self.get_queryset.active(*arg, **kwargs)
 
 class ProfileManager(models.Manager):
 	#custom manager
 	def has_email(self):
 		return Profile.objects.filter(is_active=True).exclude(email='')
+	def active(self):
+		return Profile.objects.filter(is_active=True)
 
 class Profile(AbstractUser):
 	email = models.EmailField(db_index = True, blank=True)
@@ -82,6 +100,7 @@ class Profile(AbstractUser):
 
 	objects = CustomUserManager()
 	has_email = ProfileManager()
+	active = ProfileManager()
 	
 	def __str__(self):
 		try:

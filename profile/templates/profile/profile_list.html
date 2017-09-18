@@ -31,7 +31,7 @@
     {% endif %}
 
     {% if object.is_leerling %}ouder(s): {% endif %}
-    {% for user in object.parents.all %}
+    {% for user in object.parents.all.active %}
       {% if user.overleden %}
         {{ user|safe }}
       {% else %}

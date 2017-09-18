@@ -65,19 +65,19 @@
                     {% endfor %}
                 </td>
                 <td>
-                    {% for klasouder in object.klasouders.all %}
+                    {% for klasouder in object.klasouders.all.active %}
                         <a href="{% url 'profile' klasouder.pk %}">{{ klasouder }}</a>
                         <br>
                     {% endfor %}
                 </td>
                 <td>
-                    {% for klasouder in object.klasouders.all %}
+                    {% for klasouder in object.klasouders.all.active %}
                         {{klasouder.gsm}}
                         <br>
                     {% endfor %}
                 </td>
                 <td>
-                    {% for klasouder in object.klasouders.all %}
+                    {% for klasouder in object.klasouders.all.active %}
                         <a href="mailtro:{{klasouder.email}}">{{klasouder.email}}</a>
                         <br>
                     {% endfor %}

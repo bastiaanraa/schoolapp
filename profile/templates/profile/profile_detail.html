@@ -33,7 +33,7 @@
     {% if object.is_leerling %}
         <h2>Ouder(s):</h2>
         <ul class='list-unstyled'>
-        {% for parent in object.parents.all %}
+        {% for parent in object.parents.all.active %}
             <li><a href="{% url 'profile' parent.pk %}">{{ parent }}</a></li>
         {% endfor %}
         </ul>
