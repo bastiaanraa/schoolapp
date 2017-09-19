@@ -471,12 +471,12 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 
 	def save_model(self, request, obj, form, change):
 		# indien nog nooit aangemeld -> set_password(username) bij wijzigen username
-		# maar omdat er al usernames zijn gewijzigd -> rechtzetting
+		# omdat we bij aanmaken set_password(username), daarom opnieuw set_passwprd voor versturen login mail
+		# beetje omslachtig, beter set_password(voormaan+naam)
 		if 'username' in form.changed_data:
-			pass
-		if obj.last_login is None:
-			obj.set_password(obj.make_pw_hash(obj.username))
-			print "set passwoord"
+			if obj.last_login is None:
+				obj.set_password(obj.make_pw_hash(obj.username))
+
 		super(UserAdmin, self).save_model(request, obj, form, change)
 
 	def changelist_view(self, request, extra_context=None):
