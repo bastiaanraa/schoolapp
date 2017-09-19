@@ -422,7 +422,7 @@ class SchoolFilter(admin.SimpleListFilter):
 class UserAdmin(ImportMixin, BaseUserAdmin):
 	resource_class = ProfileResource
 	#inlines = (ProfileInline, )
-	list_filter = ('is_leerling', SchoolFilter, 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker', 'is_active', 'doelgroep')
+	list_filter = ('is_leerling', SchoolFilter, 'is_ouder', 'is_klasouder', 'is_leerkracht', 'is_medewerker', 'is_active', 'doelgroep', 'last_login', 'date_joined')
 	list_display = ['first_name', 'last_name', 'is_ouder', 'is_leerling', 'klas', 'klasouder_klas', 'klasleerkracht_klas']
 
 	readonly_fields = ('image_tag',)
