@@ -568,13 +568,14 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				elif klas_ouder.klascode.startswith("4TS1"):
 					klas = ClassRoom.objects.get(klascode="5T1")
 
+				elif klas_ouder.klascode.startswith("5S1A"):
+					klas = ClassRoom.objects.get(klascode="6S1A")
+				elif klas_ouder.klascode.startswith("5S1B"):
+					klas = ClassRoom.objects.get(klascode="6S1B")
+				elif klas_ouder.klascode.startswith("5TS1"):
+					klas = ClassRoom.objects.get(klascode="6T1")
+
 				#12de klas geen klasouder meer
-				elif klas_ouder.klascode.startswith("4S1A"):
-					klas = ClassRoom.objects.get(klascode="5S1A")
-				elif klas_ouder.klascode.startswith("4S1B"):
-					klas = ClassRoom.objects.get(klascode="5S1B")
-				elif klas_ouder.klascode.startswith("4TS1"):
-					klas = ClassRoom.objects.get(klascode="5T1")
 
 				if klas:
 					p.klas_ouder.add(klas)
@@ -636,10 +637,17 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 				elif klas_klasleerkracht.klascode.startswith("4TS1"):
 					klas = ClassRoom.objects.get(klascode="5T1")
 
+				elif klas_klasleerkracht.klascode.startswith("5S1A"):
+					klas = ClassRoom.objects.get(klascode="6S1A")
+				elif klas_klasleerkracht.klascode.startswith("5S1B"):
+					klas = ClassRoom.objects.get(klascode="6S1B")
+				elif klas_klasleerkracht.klascode.startswith("5TS1"):
+					klas = ClassRoom.objects.get(klascode="6T1")
+
 				#12de klas geen klasleerkracht meer automatisch
-				elif klas_klasleerkracht.klascode.startswith("5S"):
+				elif klas_klasleerkracht.klascode.startswith("6S"):
 					klas = None
-				elif klas_klasleerkracht.klascode.startswith("5T"):
+				elif klas_klasleerkracht.klascode.startswith("6T"):
 					klas = None
 
 				if klas:
