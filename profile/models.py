@@ -31,14 +31,6 @@ class ProfileQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(is_active=True)
 
-class ProductPhotoManager(models.Manager):
-    use_for_related_fields = True
-
-    def get_query_set(self):
-        return ProductPhotoQuerySet(self.model)
-
-    def live(self, *args, **kwargs):
-        return self.get_query_set().live(*args, **kwargs)
 
 class CustomUserManager(UserManager):
 	use_for_related_fields = True
