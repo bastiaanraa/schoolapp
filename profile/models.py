@@ -135,7 +135,11 @@ class Profile(AbstractUser):
 				return ""
 		except Exception, e:
 			pass
-		return capfirst(self.gemeente.split(' ')[0].lower())
+		try:
+			return self.gemeente.lower().title().split('(', 1)[0].strip()
+		except Exception as e:
+			return self.gemeente.lower()
+		
 
 	def get_partner(self):
 		try:
