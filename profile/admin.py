@@ -64,7 +64,7 @@ class ProfileResource(resources.ModelResource):
 
 	class Meta:
 		model = Profile
-		import_id_fields = ('nickname',) #rijksregister!!
+		import_id_fields = ('username',) #rijksregister!!
 		fields = ('username', 'nickname','last_name','first_name', 'geboortedatum', \
 			'postcode', 'gescheiden', 'klas', 'telefoon', )
 		skip_unchanged = True
