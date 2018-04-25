@@ -202,6 +202,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = passwords.get('email_backend', 'username')
 EMAIL_HOST_PASSWORD = passwords.get('email_backend', 'password')
 EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 
