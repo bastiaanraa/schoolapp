@@ -129,6 +129,9 @@ DATABASES = {
         'NAME': 'schoolapp',
         'USER': passwords.get('database', 'user'),
         'PASSWORD': passwords.get('database', 'password'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
