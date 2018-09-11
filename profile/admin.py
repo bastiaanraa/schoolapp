@@ -35,7 +35,7 @@ class ProfileResource(resources.ModelResource):
 	first_name = fields.Field(attribute='first_name', column_name='Voornaam')
 	last_name = fields.Field(attribute='last_name', column_name='Naam')
 	nickname = fields.Field(attribute='nickname', column_name='Nickname')
-	geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum', widget=widgets.DateWidget('%d.%m.%Y'))
+	#geboortedatum = fields.Field(attribute='geboortedatum', column_name='Geboortedatum', widget=widgets.DateWidget('%d.%m.%Y'))
 	
 	aanspreektitel = fields.Field(attribute='aanspreektitel', column_name='Aanspreektitel (Aanschrijf)')
 	aanspreeknaam = fields.Field(attribute="aanspreeknaam", column_name='Aanspreeknaam (Aanschrijf)')
@@ -65,7 +65,8 @@ class ProfileResource(resources.ModelResource):
 	class Meta:
 		model = Profile
 		import_id_fields = ('username',) #rijksregister!!
-		fields = ('username', 'nickname','last_name','first_name', 'geboortedatum', \
+		fields = ('username', 'nickname','last_name','first_name', 
+			#'geboortedatum', 
 			'postcode', 'gescheiden', 'klas', 'telefoon', )
 		skip_unchanged = True
 		report_skipped = True
