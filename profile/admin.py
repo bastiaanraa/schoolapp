@@ -184,11 +184,11 @@ class ProfileResource(resources.ModelResource):
 						hide_address = True
 				else:
 					print "IETS FOUT"
-					print instance.aanspreeknaam+'Z'
-					print instance.parent1_naam+'Z'
-					print instance.parent1_voornaam+'Z'
-					print instance.parent2_naam+'Z'
-					print instance.parent2_voornaam+'Z'
+					#print instance.aanspreeknaam+'Z'
+					#print instance.parent1_naam+'Z'
+					#print instance.parent1_voornaam+'Z'
+					#print instance.parent2_naam+'Z'
+					#print instance.parent2_voornaam+'Z'
 					
 				
 				username = email
