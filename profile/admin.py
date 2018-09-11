@@ -351,7 +351,7 @@ class ProfileResource(resources.ModelResource):
 							print 'except BBB'
 							print e
 				except Exception, e:
-					print username
+					#print username
 					print "except C"
 					print e
 		
