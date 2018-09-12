@@ -67,7 +67,9 @@ class ProfileResource(resources.ModelResource):
 		import_id_fields = ('username',) #rijksregister!!
 		fields = ('username', 'nickname','last_name','first_name', 
 			#'geboortedatum', 
-			'postcode', 'gescheiden', 'klas', 'telefoon', )
+			'postcode', 
+			#'gescheiden', 
+			'klas', 'telefoon', )
 		skip_unchanged = True
 		report_skipped = True
 
@@ -92,9 +94,9 @@ class ProfileResource(resources.ModelResource):
 		#return profile.first_name+profile.last_name
 
 	def dehydrate_gescheiden(self, profile):
-		if profile.aanspreektitel == "Aan":
-			return True
-		return False
+		if 'ouder' in profile.aanspreektitel:
+			return False
+		return True
 
 
 	def save_instance(self, instance, using_transaction, dry_run=False):
@@ -123,16 +125,16 @@ class ProfileResource(resources.ModelResource):
 		
 		instance.is_leerling = True
 		instance.is_active = True
-		if instance.aanspreektitel == "Aan":
+		if 'vader' in instance.aanspreektitel or 'moeder' in  instance.aanspreektitel:
 			instance.gescheiden = True
-		
+		"""
 			if instance.aanspreeknaam.replace(" ", "").lower() == instance.parent1_naam.replace(" ", "").lower()+instance.parent1_voornaam.replace(" ", "").lower():
 				pass
 			elif instance.aanspreeknaam.replace(" ", "").lower() == instance.parent2_naam.replace(" ", "").lower()+instance.parent2_voornaam.replace(" ", "").lower():
 				pass
 			else:
 				raise Exception("Fout in Aanspreeknaam (Aanschrijf): %s" % (instance.aanspreeknaam))
-		
+		"""
 
 	def after_save_instance(self, instance, dry_run):
 		#print 'after_save'
@@ -155,10 +157,10 @@ class ProfileResource(resources.ModelResource):
 				voornaam = ''
 				naam = ''
 				gsm = ''
-				
+			
 
-				
-				if instance.aanspreeknaam.replace(" ", "").lower() == instance.parent1_naam.replace(" ", "").lower()+instance.parent1_voornaam.replace(" ", "").lower():
+				print instance.aanspreektitel
+				if 'vader' in instance.aanspreektitel: #.replace(" ", "").lower() == instance.parent1_naam.replace(" ", "").lower()+instance.parent1_voornaam.replace(" ", "").lower():
 					#print 'Parent 1'
 					email = instance.parent1_email
 					voornaam = instance.parent1_voornaam
@@ -170,7 +172,7 @@ class ProfileResource(resources.ModelResource):
 					
 					if 'adres:NietBeschikbaar(vader)' in instance.opmerking:
 						hide_address = True
-				elif instance.aanspreeknaam.replace(" ", "").lower() == instance.parent2_naam.replace(" ", "").lower()+instance.parent2_voornaam.replace(" ", "").lower():
+				elif 'moeder' in instance.aanspreektitel: #.replace(" ", "").lower() == instance.parent2_naam.replace(" ", "").lower()+instance.parent2_voornaam.replace(" ", "").lower():
 					#print 'Parent 2'
 					email = instance.parent2_email
 					voornaam = instance.parent2_voornaam
@@ -183,7 +185,7 @@ class ProfileResource(resources.ModelResource):
 					if 'adres:NietBeschikbaar(moeder)' in instance.opmerking:
 						hide_address = True
 				else:
-					print "IETS FOUT"
+					print "er moeten 2 ouders gemaakt worden"
 					#print instance.aanspreeknaam+'Z'
 					#print instance.parent1_naam+'Z'
 					#print instance.parent1_voornaam+'Z'
@@ -238,6 +240,7 @@ class ProfileResource(resources.ModelResource):
 				except Exception, e:
 					print "except B"
 					print e
+			
 			else:
 				try:
 					
@@ -354,6 +357,7 @@ class ProfileResource(resources.ModelResource):
 					#print username
 					print "except C"
 					print e
+			
 		
 class SchoolFilter(admin.SimpleListFilter):
 	# Human-readable title which will be displayed in the
