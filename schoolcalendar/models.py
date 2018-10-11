@@ -16,7 +16,7 @@ class SchoolCalendar(models.Model):
 		('AA', 'allen'),
 		)
 
-	titel = models.CharField(max_length=50)
+	titel = models.CharField(max_length=250)
 	tekst = models.TextField(blank=True)
 	startdatum = models.DateField()
 	einddatum = models.DateField(null=True, blank=True)
