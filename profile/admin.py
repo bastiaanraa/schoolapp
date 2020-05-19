@@ -432,7 +432,7 @@ def export_email(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
 
-    writer = csv.writer(response, delimiter=";", quoting=csv.QUOTE_MINIMAL)
+    writer = csv.writer(response, delimiter=str(u';').encode('utf-8'), quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["first_name", "last_name", "email"])
     for user in queryset:
         writer.writerow([
