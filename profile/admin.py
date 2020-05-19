@@ -423,6 +423,27 @@ class SchoolFilter(admin.SimpleListFilter):
 				)
 		return queryset
 
+
+def export_email(modeladmin, request, queryset):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+    writer = csv.writer(response, delimiter=";", quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(["first_name", "last_name", "email"])
+    for user in queryset:
+        writer.writerow([
+            user.first_name.encode('utf8'),
+            user.last_name.encode('utf8'),
+            user.email.encode('utf8'),
+
+        ])
+
+    return response
+
+export_email.short_description = "Exporteer email"
+
+
 # Define a new User admin
 class UserAdmin(ImportMixin, BaseUserAdmin):
 	resource_class = ProfileResource
@@ -433,7 +454,7 @@ class UserAdmin(ImportMixin, BaseUserAdmin):
 	readonly_fields = ('image_tag',)
 	
 	filter_horizontal = ('parents',)
-	actions = ['send_password_selected', 'put_inactive', 'put_one_higher_klasouder','put_one_higher_klasleerkracht']
+	actions = ['send_password_selected', 'put_inactive', 'put_one_higher_klasouder','put_one_higher_klasleerkracht', export_email,]
 
 	def get_fieldsets(self, request, obj=None):
 		if not obj:
